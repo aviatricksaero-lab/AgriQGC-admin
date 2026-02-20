@@ -8,3 +8,4 @@
 2026-02-17T05:33:08.646Z - POST /api/facilities/seed [IP: ::1]
 Body: {"force":true}
 2026-02-17T05:33:49.352Z - GET /api/facilities?all=true [IP: ::1]
+2026-02-17T06:54:38.025Z - GET /api/facilities?all=true [IP: ::1]

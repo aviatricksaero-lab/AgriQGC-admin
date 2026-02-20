@@ -7,7 +7,20 @@ const FacilitySchema = new mongoose.Schema({
     },
     zoneType: {
         type: String,
-        default: 'yellow' // red, yellow, green
+        enum: ['red', 'yellow', 'green', 'blue'],
+        default: 'yellow'
+    },
+    description: {
+        type: String,
+        default: ''
+    },
+    minAltitude: {
+        type: Number,
+        default: 0
+    },
+    maxAltitude: {
+        type: Number,
+        default: 500
     },
     geometry: {
         type: {
@@ -16,7 +29,7 @@ const FacilitySchema = new mongoose.Schema({
             required: true
         },
         coordinates: {
-            type: Array, // Supports [[[lon, lat], ...]] for Polygon and [[[[lon, lat], ...]]] for MultiPolygon
+            type: Array,   // [[[lon, lat], ...]] for Polygon
             required: true
         }
     },
