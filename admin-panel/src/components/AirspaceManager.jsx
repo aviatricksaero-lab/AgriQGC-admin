@@ -27,7 +27,7 @@ import toast from 'react-hot-toast';
 const API_URL = import.meta.env.VITE_API_URL;
 
 const cellSx = { borderBottom: '1px solid rgba(255,255,255,0.04)', color: 'text.primary', py: 1.5 };
-const headCellSx = { ...cellSx, color: 'text.secondary', fontWeight: 700, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.08em', background: 'rgba(255,255,255,0.03)' };
+const headCellSx = { ...cellSx, color: 'text.secondary', fontWeight: 800, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(255,255,255,0.02)' };
 
 const ZONE_TYPES = [
     { value: 'red', label: 'Red (Restricted)', color: '#EF4444' },
@@ -222,12 +222,12 @@ const AirspaceManager = () => {
                 <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }} onClose={() => setError(null)}>{error}</Alert>
             )}
 
-            <Paper sx={{ background: 'rgba(22,22,39,0.8)', overflow: 'hidden' }}>
+            <Paper className="glass-card" sx={{ overflow: 'hidden', borderRadius: 4 }}>
                 {/* Header */}
                 <Box sx={{ p: 3, display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
                     <Box sx={{ flex: 1 }}>
-                        <Typography variant="h6" sx={{ fontWeight: 700, color: 'white' }}>Airspace Zones</Typography>
-                        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                        <Typography variant="h6" sx={{ fontWeight: 800, color: 'white', letterSpacing: '-0.02em' }}>Airspace Zones</Typography>
+                        <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
                             {filtered.length} zones · Manage no-fly and restricted areas
                         </Typography>
                     </Box>
@@ -267,7 +267,7 @@ const AirspaceManager = () => {
                     </FormControl>
 
                     <Tooltip title="Seed Test Data">
-                        <IconButton onClick={handleSeedData} disabled={seeding} size="small" sx={{ bgcolor: 'rgba(124,58,237,0.1)', color: '#7C3AED', '&:hover': { bgcolor: 'rgba(124,58,237,0.2)' }, borderRadius: 2 }}>
+                        <IconButton onClick={handleSeedData} disabled={seeding} size="small" sx={{ bgcolor: 'rgba(99,102,241,0.1)', color: '#818CF8', '&:hover': { bgcolor: 'rgba(99,102,241,0.2)' }, borderRadius: 2 }}>
                             {seeding ? <CircularProgress size={16} color="inherit" /> : <SeedIcon fontSize="small" />}
                         </IconButton>
                     </Tooltip>
@@ -403,7 +403,7 @@ const AirspaceManager = () => {
                 onClose={() => setAddDialogOpen(false)}
                 maxWidth="sm"
                 fullWidth
-                PaperProps={{ sx: { background: '#1a1a2e', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 3 } }}
+                PaperProps={{ sx: { background: '#0A0A0F', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 4 } }}
             >
                 <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1.5, pb: 1 }}>
                     <MapIcon sx={{ color: '#EF4444' }} />
@@ -507,7 +507,7 @@ const AirspaceManager = () => {
             <Dialog
                 open={deleteDialogOpen}
                 onClose={() => setDeleteDialogOpen(false)}
-                PaperProps={{ sx: { background: '#1a1a2e', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 3, minWidth: 360 } }}
+                PaperProps={{ sx: { background: '#0A0A0F', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 4, minWidth: 360 } }}
             >
                 <DialogTitle sx={{ color: 'white', fontWeight: 700 }}>Delete Zone?</DialogTitle>
                 <DialogContent>

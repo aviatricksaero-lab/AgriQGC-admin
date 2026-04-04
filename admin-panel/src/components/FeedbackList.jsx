@@ -71,7 +71,7 @@ const FeedbackList = () => {
     const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
 
     const getAvatarColor = (str = '') => {
-        const colors = ['#7C3AED', '#06B6D4', '#10B981', '#F59E0B', '#EF4444', '#EC4899'];
+        const colors = ['#10B981', '#6366F1', '#F59E0B', '#EC4899', '#EF4444', '#3B82F6'];
         return colors[(str.charCodeAt(0) || 0) % colors.length];
     };
 
@@ -92,12 +92,12 @@ const FeedbackList = () => {
                 <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }} onClose={() => setError(null)}>{error}</Alert>
             )}
 
-            <Paper sx={{ background: 'rgba(22,22,39,0.8)', overflow: 'hidden' }}>
+            <Paper className="glass-card" sx={{ overflow: 'hidden', borderRadius: 4 }}>
                 {/* Header */}
                 <Box sx={{ p: 3, display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
                     <Box sx={{ flex: 1 }}>
-                        <Typography variant="h6" sx={{ fontWeight: 700, color: 'white' }}>User Feedback</Typography>
-                        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                        <Typography variant="h6" sx={{ fontWeight: 800, color: 'white', letterSpacing: '-0.02em' }}>User Feedback</Typography>
+                        <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
                             {filtered.length} submissions
                         </Typography>
                     </Box>
@@ -114,8 +114,8 @@ const FeedbackList = () => {
                             '& .MuiOutlinedInput-root': {
                                 borderRadius: 2, bgcolor: 'rgba(255,255,255,0.04)',
                                 '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' },
-                                '&:hover fieldset': { borderColor: 'rgba(245,158,11,0.5)' },
-                                '&.Mui-focused fieldset': { borderColor: '#F59E0B' },
+                                '&:hover fieldset': { borderColor: 'rgba(16,185,129,0.5)' },
+                                '&.Mui-focused fieldset': { borderColor: '#10B981' },
                             },
                         }}
                     />
@@ -125,7 +125,7 @@ const FeedbackList = () => {
                         </IconButton>
                     </Tooltip>
                     <Tooltip title="Refresh">
-                        <IconButton onClick={fetchFeedback} size="small" sx={{ bgcolor: 'rgba(245,158,11,0.1)', color: '#F59E0B', '&:hover': { bgcolor: 'rgba(245,158,11,0.2)' }, borderRadius: 2 }}>
+                        <IconButton onClick={fetchFeedback} size="small" sx={{ bgcolor: 'rgba(16,185,129,0.12)', color: '#10B981', '&:hover': { bgcolor: 'rgba(16,185,129,0.2)' }, borderRadius: 2 }}>
                             <RefreshIcon fontSize="small" />
                         </IconButton>
                     </Tooltip>
@@ -224,7 +224,7 @@ const FeedbackList = () => {
                                 onChange={(_, p) => setPage(p)}
                                 sx={{
                                     '& .MuiPaginationItem-root': { color: 'text.secondary', borderColor: 'rgba(255,255,255,0.1)' },
-                                    '& .Mui-selected': { bgcolor: alpha('#F59E0B', 0.2), color: '#F59E0B', borderColor: alpha('#F59E0B', 0.4) },
+                                    '& .Mui-selected': { bgcolor: alpha('#10B981', 0.2), color: '#10B981', borderColor: alpha('#10B981', 0.4) },
                                 }}
                                 variant="outlined"
                                 shape="rounded"

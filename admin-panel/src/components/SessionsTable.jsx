@@ -18,7 +18,7 @@ import toast from 'react-hot-toast';
 const API_URL = import.meta.env.VITE_API_URL;
 
 const cellSx = { borderBottom: '1px solid rgba(255,255,255,0.04)', color: 'text.primary', py: 1.5 };
-const headCellSx = { ...cellSx, color: 'text.secondary', fontWeight: 700, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.08em', background: 'rgba(255,255,255,0.03)' };
+const headCellSx = { ...cellSx, color: 'text.secondary', fontWeight: 800, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(255,255,255,0.02)' };
 
 const MAX_DURATION_BAR = 120; // minutes
 
@@ -68,7 +68,7 @@ const SessionsTable = () => {
     const paginated = filtered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
     const getDurationColor = (duration) => {
-        if (duration < 10) return '#06B6D4';
+        if (duration < 10) return '#6366F1';
         if (duration < 30) return '#10B981';
         if (duration < 60) return '#F59E0B';
         return '#EF4444';
@@ -80,12 +80,12 @@ const SessionsTable = () => {
                 <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }} onClose={() => setError(null)}>{error}</Alert>
             )}
 
-            <Paper sx={{ background: 'rgba(22,22,39,0.8)', overflow: 'hidden' }}>
+            <Paper className="glass-card" sx={{ overflow: 'hidden', borderRadius: 4 }}>
                 {/* Header */}
                 <Box sx={{ p: 3, display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
                     <Box sx={{ flex: 1 }}>
-                        <Typography variant="h6" sx={{ fontWeight: 700, color: 'white' }}>Flight Sessions</Typography>
-                        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                        <Typography variant="h6" sx={{ fontWeight: 800, color: 'white', letterSpacing: '-0.02em' }}>Flight Sessions</Typography>
+                        <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
                             {filtered.length} total sessions
                         </Typography>
                     </Box>
@@ -113,7 +113,7 @@ const SessionsTable = () => {
                         </IconButton>
                     </Tooltip>
                     <Tooltip title="Refresh">
-                        <IconButton onClick={fetchSessions} size="small" sx={{ bgcolor: 'rgba(16,185,129,0.1)', color: '#10B981', '&:hover': { bgcolor: 'rgba(16,185,129,0.2)' }, borderRadius: 2 }}>
+                        <IconButton onClick={fetchSessions} size="small" sx={{ bgcolor: 'rgba(99,102,241,0.1)', color: '#818CF8', '&:hover': { bgcolor: 'rgba(99,102,241,0.2)' }, borderRadius: 2 }}>
                             <RefreshIcon fontSize="small" />
                         </IconButton>
                     </Tooltip>
@@ -145,13 +145,14 @@ const SessionsTable = () => {
                                             <TableCell sx={cellSx}>
                                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                                     <Box sx={{
-                                                        width: 30, height: 30, borderRadius: '8px',
-                                                        background: 'linear-gradient(135deg, #10B981, #06B6D4)',
+                                                        width: 32, height: 32, borderRadius: '10px',
+                                                        background: 'linear-gradient(135deg, #10B981, #6366F1)',
                                                         display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                                                        boxShadow: '0 4px 10px rgba(16,185,129,0.2)',
                                                     }}>
-                                                        <FlightIcon sx={{ color: 'white', fontSize: 14 }} />
+                                                        <FlightIcon sx={{ color: 'white', fontSize: 16 }} />
                                                     </Box>
-                                                    <Typography variant="body2" sx={{ fontWeight: 600, color: 'white' }}>{s.username}</Typography>
+                                                    <Typography variant="body2" sx={{ fontWeight: 700, color: 'white' }}>{s.username}</Typography>
                                                 </Box>
                                             </TableCell>
                                             <TableCell sx={cellSx}>

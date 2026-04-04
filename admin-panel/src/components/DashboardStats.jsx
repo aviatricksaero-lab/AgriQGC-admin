@@ -105,15 +105,15 @@ const StatCard = ({ title, value, icon, color, subtitle, loading }) => (
 );
 
 const ZONE_COLORS = { red: '#EF4444', yellow: '#F59E0B', green: '#10B981', blue: '#3B82F6' };
-const PIE_COLORS = ['#7C3AED', '#06B6D4', '#10B981', '#F59E0B', '#EF4444'];
+const PIE_COLORS = ['#10B981', '#6366F1', '#F59E0B', '#EC4899', '#EF4444'];
 
 const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
         return (
-            <Paper sx={{ p: 1.5, border: '1px solid rgba(255,255,255,0.1)', background: '#1e1e35' }}>
+            <Paper className="glass-card" sx={{ p: 1.5, border: '1px solid rgba(255,255,255,0.1)' }}>
                 <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 0.5 }}>{label}</Typography>
                 {payload.map(p => (
-                    <Typography key={p.dataKey} variant="caption" sx={{ color: p.color, display: 'block', fontWeight: 600 }}>
+                    <Typography key={p.dataKey} variant="caption" sx={{ color: p.color, display: 'block', fontWeight: 700 }}>
                         {p.name}: {p.value}
                     </Typography>
                 ))}
@@ -211,8 +211,8 @@ const DashboardStats = () => {
             {/* Stat Cards */}
             <Grid container spacing={3} sx={{ mb: 4 }}>
                 {[
-                    { title: 'Total Users', value: stats.userCount, icon: <UsersIcon />, color: '#7C3AED', subtitle: 'Registered pilots' },
-                    { title: 'Flight Sessions', value: stats.sessionCount, icon: <FlightsIcon />, color: '#10B981', subtitle: 'Total logged flights' },
+                    { title: 'Total Users', value: stats.userCount, icon: <UsersIcon />, color: '#10B981', subtitle: 'Registered pilots' },
+                    { title: 'Flight Sessions', value: stats.sessionCount, icon: <FlightsIcon />, color: '#6366F1', subtitle: 'Total logged flights' },
                     { title: 'Feedback', value: stats.feedbackCount, icon: <FeedbackIcon />, color: '#F59E0B', subtitle: 'User submissions' },
                     { title: 'Airspace Zones', value: stats.facilityCount, icon: <MapIcon />, color: '#EF4444', subtitle: 'Active zones' },
                 ].map((card) => (
@@ -226,40 +226,40 @@ const DashboardStats = () => {
             <Grid container spacing={3} sx={{ mb: 4 }}>
                 {/* Growth Chart */}
                 <Grid item xs={12} lg={8}>
-                    <Paper sx={{ p: 3, height: 320, background: 'rgba(22,22,39,0.8)' }}>
+                    <Paper className="glass-card" sx={{ p: 3, height: 320, borderRadius: 4 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2.5 }}>
-                            <TrendingUpIcon sx={{ color: '#7C3AED', fontSize: 20 }} />
-                            <Typography variant="subtitle1" sx={{ fontWeight: 700, color: 'white' }}>
+                            <TrendingUpIcon sx={{ color: '#10B981', fontSize: 20 }} />
+                            <Typography variant="subtitle1" sx={{ fontWeight: 800, color: 'white' }}>
                                 Growth Overview
                             </Typography>
-                            <Typography variant="caption" sx={{ color: 'text.secondary', ml: 0.5 }}>
+                            <Typography variant="caption" sx={{ color: 'text.secondary', ml: 0.5, fontWeight: 500 }}>
                                 (last 6 months)
                             </Typography>
                         </Box>
                         {loading ? (
                             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 220 }}>
-                                <CircularProgress size={40} sx={{ color: '#7C3AED' }} />
+                                <CircularProgress size={40} sx={{ color: '#10B981' }} />
                             </Box>
                         ) : (
                             <ResponsiveContainer width="100%" height={230}>
                                 <AreaChart data={chartData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
                                     <defs>
                                         <linearGradient id="gradUsers" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="#7C3AED" stopOpacity={0.4} />
-                                            <stop offset="95%" stopColor="#7C3AED" stopOpacity={0} />
-                                        </linearGradient>
-                                        <linearGradient id="gradSessions" x1="0" y1="0" x2="0" y2="1">
                                             <stop offset="5%" stopColor="#10B981" stopOpacity={0.4} />
                                             <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
                                         </linearGradient>
+                                        <linearGradient id="gradSessions" x1="0" y1="0" x2="0" y2="1">
+                                            <stop offset="5%" stopColor="#6366F1" stopOpacity={0.4} />
+                                            <stop offset="95%" stopColor="#6366F1" stopOpacity={0} />
+                                        </linearGradient>
                                     </defs>
                                     <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                                    <XAxis dataKey="month" tick={{ fill: '#94A3B8', fontSize: 11 }} axisLine={false} tickLine={false} />
-                                    <YAxis tick={{ fill: '#94A3B8', fontSize: 11 }} axisLine={false} tickLine={false} />
+                                    <XAxis dataKey="month" tick={{ fill: '#94A3B8', fontSize: 11, fontWeight: 600 }} axisLine={false} tickLine={false} />
+                                    <YAxis tick={{ fill: '#94A3B8', fontSize: 11, fontWeight: 600 }} axisLine={false} tickLine={false} />
                                     <Tooltip content={<CustomTooltip />} />
-                                    <Legend wrapperStyle={{ paddingTop: 10, fontSize: 12 }} />
-                                    <Area type="monotone" dataKey="users" name="New Users" stroke="#7C3AED" strokeWidth={2.5} fill="url(#gradUsers)" dot={{ fill: '#7C3AED', r: 4 }} />
-                                    <Area type="monotone" dataKey="sessions" name="Sessions" stroke="#10B981" strokeWidth={2.5} fill="url(#gradSessions)" dot={{ fill: '#10B981', r: 4 }} />
+                                    <Legend wrapperStyle={{ paddingTop: 10, fontSize: 12, fontWeight: 600 }} />
+                                    <Area type="monotone" dataKey="users" name="New Users" stroke="#10B981" strokeWidth={3} fill="url(#gradUsers)" dot={{ fill: '#10B981', r: 4, strokeWidth: 2, stroke: '#0F0F1A' }} activeDot={{ r: 6, strokeWidth: 0 }} />
+                                    <Area type="monotone" dataKey="sessions" name="Sessions" stroke="#6366F1" strokeWidth={3} fill="url(#gradSessions)" dot={{ fill: '#6366F1', r: 4, strokeWidth: 2, stroke: '#0F0F1A' }} activeDot={{ r: 6, strokeWidth: 0 }} />
                                 </AreaChart>
                             </ResponsiveContainer>
                         )}
@@ -268,10 +268,10 @@ const DashboardStats = () => {
 
                 {/* Zone Distribution Pie */}
                 <Grid item xs={12} lg={4}>
-                    <Paper sx={{ p: 3, height: 320, background: 'rgba(22,22,39,0.8)' }}>
+                    <Paper className="glass-card" sx={{ p: 3, height: 320, borderRadius: 4 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2.5 }}>
                             <MapIcon sx={{ color: '#EF4444', fontSize: 20 }} />
-                            <Typography variant="subtitle1" sx={{ fontWeight: 700, color: 'white' }}>
+                            <Typography variant="subtitle1" sx={{ fontWeight: 800, color: 'white' }}>
                                 Zone Distribution
                             </Typography>
                         </Box>
@@ -286,13 +286,13 @@ const DashboardStats = () => {
                         ) : (
                             <ResponsiveContainer width="100%" height={230}>
                                 <PieChart>
-                                    <Pie data={zoneData} cx="50%" cy="50%" innerRadius={55} outerRadius={85} paddingAngle={5} dataKey="value">
+                                    <Pie data={zoneData} cx="50%" cy="50%" innerRadius={60} outerRadius={85} paddingAngle={8} dataKey="value" stroke="none">
                                         {zoneData.map((entry, index) => (
                                             <Cell key={index} fill={ZONE_COLORS[entry.name] || PIE_COLORS[index % PIE_COLORS.length]} />
                                         ))}
                                     </Pie>
                                     <Tooltip content={<CustomTooltip />} />
-                                    <Legend formatter={(v) => <span style={{ color: '#94A3B8', fontSize: 12, textTransform: 'capitalize' }}>{v}</span>} />
+                                    <Legend formatter={(v) => <span style={{ color: '#94A3B8', fontSize: 12, fontWeight: 600, textTransform: 'capitalize' }}>{v}</span>} />
                                 </PieChart>
                             </ResponsiveContainer>
                         )}
@@ -304,16 +304,16 @@ const DashboardStats = () => {
             <Grid container spacing={3}>
                 {/* Recent Users */}
                 <Grid item xs={12} md={6}>
-                    <Paper sx={{ p: 3, background: 'rgba(22,22,39,0.8)' }}>
+                    <Paper className="glass-card" sx={{ p: 3, borderRadius: 4 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                            <UsersIcon sx={{ color: '#7C3AED', fontSize: 18 }} />
-                            <Typography variant="subtitle1" sx={{ fontWeight: 700, color: 'white' }}>
+                            <UsersIcon sx={{ color: '#10B981', fontSize: 18 }} />
+                            <Typography variant="subtitle1" sx={{ fontWeight: 800, color: 'white' }}>
                                 Recent Registrations
                             </Typography>
                         </Box>
                         <Divider sx={{ mb: 2, borderColor: 'rgba(255,255,255,0.06)' }} />
                         {loading ? (
-                            [...Array(4)].map((_, i) => <Skeleton key={i} variant="rectangular" height={40} sx={{ mb: 1, borderRadius: 1, bgcolor: 'rgba(255,255,255,0.04)' }} />)
+                            [...Array(4)].map((_, i) => <Skeleton key={i} variant="rectangular" height={40} sx={{ mb: 1, borderRadius: 2, bgcolor: 'rgba(255,255,255,0.04)' }} />)
                         ) : recentUsers.length === 0 ? (
                             <Typography variant="body2" sx={{ color: 'text.secondary', textAlign: 'center', py: 3 }}>No users yet</Typography>
                         ) : (
@@ -321,27 +321,28 @@ const DashboardStats = () => {
                                 {recentUsers.map((user) => (
                                     <Box key={user._id} sx={{
                                         display: 'flex', alignItems: 'center', gap: 2,
-                                        p: 1.2, borderRadius: 2, mb: 0.5,
-                                        '&:hover': { bgcolor: 'rgba(124,58,237,0.08)' },
+                                        p: 1.2, borderRadius: 3, mb: 0.5,
+                                        '&:hover': { bgcolor: 'rgba(16,185,129,0.08)' },
                                         transition: 'background 0.2s',
                                     }}>
                                         <Box sx={{
-                                            width: 34, height: 34, borderRadius: '10px',
-                                            background: 'linear-gradient(135deg, #7C3AED, #06B6D4)',
+                                            width: 34, height: 34, borderRadius: '12px',
+                                            background: 'linear-gradient(135deg, #10B981, #6366F1)',
                                             display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                            fontWeight: 700, color: 'white', fontSize: '0.8rem', flexShrink: 0,
+                                            fontWeight: 800, color: 'white', fontSize: '0.8rem', flexShrink: 0,
+                                            boxShadow: '0 4px 10px rgba(16,185,129,0.3)',
                                         }}>
                                             {(user.displayname || user.username || 'U')[0].toUpperCase()}
                                         </Box>
                                         <Box sx={{ flex: 1, minWidth: 0 }}>
-                                            <Typography variant="body2" sx={{ fontWeight: 600, color: 'white', noWrap: true }}>
+                                            <Typography variant="body2" sx={{ fontWeight: 700, color: 'white', noWrap: true }}>
                                                 {user.displayname || user.username}
                                             </Typography>
-                                            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                                            <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
                                                 {user.email}
                                             </Typography>
                                         </Box>
-                                        <Typography variant="caption" sx={{ color: 'text.secondary', flexShrink: 0 }}>
+                                        <Typography variant="caption" sx={{ color: 'text.secondary', flexShrink: 0, fontWeight: 600 }}>
                                             {new Date(user.created_at).toLocaleDateString()}
                                         </Typography>
                                     </Box>
@@ -353,16 +354,16 @@ const DashboardStats = () => {
 
                 {/* Recent Sessions */}
                 <Grid item xs={12} md={6}>
-                    <Paper sx={{ p: 3, background: 'rgba(22,22,39,0.8)' }}>
+                    <Paper className="glass-card" sx={{ p: 3, borderRadius: 4 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                            <FlightsIcon sx={{ color: '#10B981', fontSize: 18 }} />
-                            <Typography variant="subtitle1" sx={{ fontWeight: 700, color: 'white' }}>
+                            <FlightsIcon sx={{ color: '#6366F1', fontSize: 18 }} />
+                            <Typography variant="subtitle1" sx={{ fontWeight: 800, color: 'white' }}>
                                 Recent Sessions
                             </Typography>
                         </Box>
                         <Divider sx={{ mb: 2, borderColor: 'rgba(255,255,255,0.06)' }} />
                         {loading ? (
-                            [...Array(4)].map((_, i) => <Skeleton key={i} variant="rectangular" height={40} sx={{ mb: 1, borderRadius: 1, bgcolor: 'rgba(255,255,255,0.04)' }} />)
+                            [...Array(4)].map((_, i) => <Skeleton key={i} variant="rectangular" height={40} sx={{ mb: 1, borderRadius: 2, bgcolor: 'rgba(255,255,255,0.04)' }} />)
                         ) : recentSessions.length === 0 ? (
                             <Typography variant="body2" sx={{ color: 'text.secondary', textAlign: 'center', py: 3 }}>No sessions recorded</Typography>
                         ) : (
@@ -370,23 +371,24 @@ const DashboardStats = () => {
                                 {recentSessions.map((s) => (
                                     <Box key={s._id} sx={{
                                         display: 'flex', alignItems: 'center', gap: 2,
-                                        p: 1.2, borderRadius: 2, mb: 0.5,
-                                        '&:hover': { bgcolor: 'rgba(16,185,129,0.08)' },
+                                        p: 1.2, borderRadius: 3, mb: 0.5,
+                                        '&:hover': { bgcolor: 'rgba(99,102,241,0.08)' },
                                         transition: 'background 0.2s',
                                     }}>
                                         <Box sx={{
-                                            width: 34, height: 34, borderRadius: '10px',
-                                            background: 'linear-gradient(135deg, #10B981, #06B6D4)',
+                                            width: 34, height: 34, borderRadius: '12px',
+                                            background: 'linear-gradient(135deg, #6366F1, #10B981)',
                                             display: 'flex', alignItems: 'center', justifyContent: 'center',
                                             flexShrink: 0,
+                                            boxShadow: '0 4px 10px rgba(99,102,241,0.3)',
                                         }}>
                                             <FlightsIcon sx={{ color: 'white', fontSize: 16 }} />
                                         </Box>
                                         <Box sx={{ flex: 1, minWidth: 0 }}>
-                                            <Typography variant="body2" sx={{ fontWeight: 600, color: 'white' }}>
+                                            <Typography variant="body2" sx={{ fontWeight: 700, color: 'white' }}>
                                                 {s.username}
                                             </Typography>
-                                            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                                            <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
                                                 {s.date} · {s.start_time} → {s.end_time}
                                             </Typography>
                                         </Box>
@@ -394,10 +396,10 @@ const DashboardStats = () => {
                                             label={`${Math.round(s.duration || 0)}m`}
                                             size="small"
                                             sx={{
-                                                bgcolor: alpha('#10B981', 0.15),
-                                                color: '#10B981',
-                                                border: `1px solid ${alpha('#10B981', 0.3)}`,
-                                                fontWeight: 600, fontSize: '0.7rem',
+                                                bgcolor: alpha('#6366F1', 0.15),
+                                                color: '#818CF8',
+                                                border: `1px solid ${alpha('#6366F1', 0.3)}`,
+                                                fontWeight: 800, fontSize: '0.7rem',
                                             }}
                                         />
                                     </Box>

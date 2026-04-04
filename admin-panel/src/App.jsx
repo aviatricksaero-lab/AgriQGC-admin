@@ -50,64 +50,62 @@ const darkTheme = createTheme({
     palette: {
         mode: 'dark',
         primary: {
-            main: '#7C3AED',
-            light: '#A78BFA',
-            dark: '#5B21B6',
+            main: '#10B981', // Emerald - Agri vibe
+            light: '#34D399',
+            dark: '#059669',
         },
         secondary: {
-            main: '#06B6D4',
-            light: '#67E8F9',
-        },
-        success: {
-            main: '#10B981',
-        },
-        warning: {
-            main: '#F59E0B',
-        },
-        error: {
-            main: '#EF4444',
+            main: '#6366F1', // Indigo
+            light: '#818CF8',
         },
         background: {
-            default: '#0F0F1A',
-            paper: '#161627',
+            default: '#0A0A0F',
+            paper: '#12121A',
         },
         text: {
-            primary: '#F1F5F9',
+            primary: '#F8FAFC',
             secondary: '#94A3B8',
         },
     },
     typography: {
-        fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
-        h4: { fontWeight: 700 },
-        h5: { fontWeight: 600 },
-        h6: { fontWeight: 600 },
+        fontFamily: '"Outfit", "Inter", sans-serif',
+        h4: { fontWeight: 800, letterSpacing: '-0.02em' },
+        h5: { fontWeight: 700, letterSpacing: '-0.01em' },
+        h6: { fontWeight: 700 },
+        subtitle1: { fontWeight: 600 },
     },
     shape: {
-        borderRadius: 12,
+        borderRadius: 16,
     },
     components: {
         MuiPaper: {
             styleOverrides: {
                 root: {
                     backgroundImage: 'none',
-                    border: '1px solid rgba(255,255,255,0.06)',
+                    border: '1px solid rgba(255,255,255,0.05)',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
                 },
             },
         },
         MuiButton: {
             styleOverrides: {
                 root: {
-                    borderRadius: 8,
+                    borderRadius: 12,
                     textTransform: 'none',
                     fontWeight: 600,
+                    padding: '8px 20px',
+                    boxShadow: 'none',
+                    '&:hover': {
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+                    },
                 },
             },
         },
         MuiChip: {
             styleOverrides: {
                 root: {
-                    borderRadius: 6,
-                    fontWeight: 600,
+                    borderRadius: 8,
+                    fontWeight: 700,
                 },
             },
         },
@@ -115,10 +113,10 @@ const darkTheme = createTheme({
 });
 
 const menuItems = [
-    { text: 'Dashboard', icon: <DashboardIcon />, path: '/', color: '#7C3AED' },
-    { text: 'Users', icon: <PeopleIcon />, path: '/users', color: '#06B6D4' },
-    { text: 'Sessions', icon: <FlightIcon />, path: '/sessions', color: '#10B981' },
-    { text: 'Feedback', icon: <FeedbackIcon />, path: '/feedback', color: '#F59E0B' },
+    { text: 'Dashboard', icon: <DashboardIcon />, path: '/', color: '#10B981' },
+    { text: 'Users', icon: <PeopleIcon />, path: '/users', color: '#6366F1' },
+    { text: 'Sessions', icon: <FlightIcon />, path: '/sessions', color: '#F59E0B' },
+    { text: 'Feedback', icon: <FeedbackIcon />, path: '/feedback', color: '#EC4899' },
     { text: 'Airspace', icon: <MapIcon />, path: '/airspace', color: '#EF4444' },
 ];
 
@@ -130,7 +128,7 @@ function Navigation({ children }) {
     const currentMenuItem = menuItems.find(item => item.path === location.pathname) || menuItems[0];
 
     return (
-        <Box sx={{ display: 'flex', minHeight: '100vh', background: 'linear-gradient(135deg, #0F0F1A 0%, #13132A 100%)' }}>
+        <Box sx={{ display: 'flex', minHeight: '100vh', background: 'radial-gradient(circle at top right, #111827, #0A0A0F)' }}>
             <CssBaseline />
 
             {/* Sidebar */}
@@ -143,9 +141,10 @@ function Navigation({ children }) {
                     '& .MuiDrawer-paper': {
                         width: collapsed ? collapsedWidth : drawerWidth,
                         boxSizing: 'border-box',
-                        background: 'linear-gradient(180deg, #1A1A2E 0%, #16213E 100%)',
+                        background: 'rgba(18, 18, 26, 0.7)',
+                        backdropFilter: 'blur(16px)',
                         border: 'none',
-                        borderRight: '1px solid rgba(255,255,255,0.06)',
+                        borderRight: '1px solid rgba(255,255,255,0.08)',
                         transition: 'width 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                         overflow: 'hidden',
                     },
@@ -164,22 +163,22 @@ function Navigation({ children }) {
                     <Box sx={{
                         width: 38,
                         height: 38,
-                        borderRadius: '10px',
-                        background: 'linear-gradient(135deg, #7C3AED, #06B6D4)',
+                        borderRadius: '12px',
+                        background: 'linear-gradient(135deg, #10B981, #6366F1)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         flexShrink: 0,
-                        boxShadow: '0 4px 15px rgba(124, 58, 237, 0.4)',
+                        boxShadow: '0 4px 15px rgba(16, 185, 129, 0.4)',
                     }}>
                         <ShieldIcon sx={{ color: 'white', fontSize: 20 }} />
                     </Box>
                     {!collapsed && (
                         <Box>
-                            <Typography variant="subtitle1" sx={{ color: 'white', fontWeight: 700, lineHeight: 1.2, fontSize: '0.9rem' }}>
-                                QGroundControl
+                            <Typography variant="subtitle1" sx={{ color: 'white', fontWeight: 800, lineHeight: 1.2, fontSize: '0.95rem' }}>
+                                QGC (Agri)
                             </Typography>
-                            <Typography variant="caption" sx={{ color: '#7C3AED', fontWeight: 600, letterSpacing: '0.08em' }}>
+                            <Typography variant="caption" sx={{ color: '#10B981', fontWeight: 700, letterSpacing: '0.08em', fontSize: '0.65rem' }}>
                                 ADMIN PANEL
                             </Typography>
                         </Box>
@@ -289,14 +288,15 @@ function Navigation({ children }) {
                             <Avatar sx={{
                                 width: 32,
                                 height: 32,
-                                background: 'linear-gradient(135deg, #7C3AED, #06B6D4)',
+                                background: 'linear-gradient(135deg, #10B981, #6366F1)',
                                 fontSize: '0.8rem',
                                 fontWeight: 700,
+                                border: '2px solid rgba(255,255,255,0.1)',
                             }}>
                                 A
                             </Avatar>
                             <Box>
-                                <Typography variant="caption" sx={{ color: 'white', fontWeight: 600, display: 'block' }}>
+                                <Typography variant="caption" sx={{ color: 'white', fontWeight: 700, display: 'block' }}>
                                     Admin
                                 </Typography>
                                 <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.7rem' }}>
@@ -309,8 +309,9 @@ function Navigation({ children }) {
                             <Avatar sx={{
                                 width: 32,
                                 height: 32,
-                                background: 'linear-gradient(135deg, #7C3AED, #06B6D4)',
+                                background: 'linear-gradient(135deg, #10B981, #6366F1)',
                                 fontSize: '0.8rem',
+                                border: '2px solid rgba(255,255,255,0.1)',
                             }}>
                                 A
                             </Avatar>
@@ -333,11 +334,11 @@ function Navigation({ children }) {
                 >
                     <Toolbar sx={{ gap: 1 }}>
                         <Box sx={{ flex: 1 }}>
-                            <Typography variant="h6" sx={{ fontWeight: 700, color: 'white', fontSize: '1rem' }}>
+                            <Typography variant="h6" sx={{ fontWeight: 800, color: 'white', fontSize: '1.2rem', letterSpacing: '-0.02em' }}>
                                 {currentMenuItem.text}
                             </Typography>
-                            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-                                QGroundControl Admin Dashboard
+                            <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
+                                QGC (Agri) Admin Dashboard
                             </Typography>
                         </Box>
                         <Chip

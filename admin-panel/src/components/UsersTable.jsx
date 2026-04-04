@@ -110,7 +110,7 @@ const UsersTable = () => {
     const paginated = filtered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
     const getAvatarColor = (str = '') => {
-        const colors = ['#7C3AED', '#06B6D4', '#10B981', '#F59E0B', '#EF4444', '#EC4899'];
+        const colors = ['#10B981', '#6366F1', '#F59E0B', '#EC4899', '#EF4444', '#3B82F6'];
         return colors[str.charCodeAt(0) % colors.length];
     };
 
@@ -120,14 +120,14 @@ const UsersTable = () => {
                 <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }} onClose={() => setError(null)}>{error}</Alert>
             )}
 
-            <Paper sx={{ background: 'rgba(22,22,39,0.8)', p: 0, overflow: 'hidden' }}>
+            <Paper className="glass-card" sx={{ p: 0, overflow: 'hidden', borderRadius: 4 }}>
                 {/* Header */}
                 <Box sx={{ p: 3, display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
                     <Box sx={{ flex: 1 }}>
-                        <Typography variant="h6" sx={{ fontWeight: 700, color: 'white' }}>
+                        <Typography variant="h6" sx={{ fontWeight: 800, color: 'white', letterSpacing: '-0.02em' }}>
                             Registered Users
                         </Typography>
-                        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                        <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
                             {filtered.length} total  {search && `· filtered from ${users.length}`}
                         </Typography>
                     </Box>
@@ -146,8 +146,8 @@ const UsersTable = () => {
                                 borderRadius: 2,
                                 bgcolor: 'rgba(255,255,255,0.04)',
                                 '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' },
-                                '&:hover fieldset': { borderColor: 'rgba(124,58,237,0.5)' },
-                                '&.Mui-focused fieldset': { borderColor: '#7C3AED' },
+                                '&:hover fieldset': { borderColor: 'rgba(16,185,129,0.5)' },
+                                '&.Mui-focused fieldset': { borderColor: '#10B981' },
                             },
                         }}
                     />
@@ -158,7 +158,7 @@ const UsersTable = () => {
                         </IconButton>
                     </Tooltip>
                     <Tooltip title="Refresh">
-                        <IconButton onClick={fetchUsers} size="small" sx={{ bgcolor: 'rgba(124,58,237,0.1)', color: '#7C3AED', '&:hover': { bgcolor: 'rgba(124,58,237,0.2)' }, borderRadius: 2 }}>
+                        <IconButton onClick={fetchUsers} size="small" sx={{ bgcolor: 'rgba(99,102,241,0.1)', color: '#818CF8', '&:hover': { bgcolor: 'rgba(99,102,241,0.2)' }, borderRadius: 2 }}>
                             <RefreshIcon fontSize="small" />
                         </IconButton>
                     </Tooltip>
@@ -191,7 +191,7 @@ const UsersTable = () => {
                                         hover
                                         sx={{
                                             cursor: 'pointer',
-                                            '&:hover': { bgcolor: 'rgba(124,58,237,0.06) !important' },
+                                            '&:hover': { bgcolor: 'rgba(16,185,129,0.06) !important' },
                                             transition: 'background 0.15s',
                                         }}
                                     >
@@ -225,10 +225,10 @@ const UsersTable = () => {
                                                 label={user.rpc_completed ?? 0}
                                                 size="small"
                                                 sx={{
-                                                    bgcolor: alpha('#7C3AED', 0.15),
-                                                    color: '#A78BFA',
-                                                    border: `1px solid ${alpha('#7C3AED', 0.3)}`,
-                                                    fontWeight: 700, fontSize: '0.72rem',
+                                                    bgcolor: alpha('#6366F1', 0.15),
+                                                    color: '#818CF8',
+                                                    border: `1px solid ${alpha('#6366F1', 0.3)}`,
+                                                    fontWeight: 800, fontSize: '0.72rem',
                                                 }}
                                             />
                                         </TableCell>
@@ -243,7 +243,7 @@ const UsersTable = () => {
                                                     <IconButton
                                                         size="small"
                                                         onClick={() => setDetailUser(user)}
-                                                        sx={{ color: '#7C3AED', '&:hover': { bgcolor: alpha('#7C3AED', 0.1) } }}
+                                                        sx={{ color: '#10B981', '&:hover': { bgcolor: alpha('#10B981', 0.1) } }}
                                                     >
                                                         <PersonIcon fontSize="small" />
                                                     </IconButton>
@@ -289,7 +289,7 @@ const UsersTable = () => {
                 open={deleteDialogOpen}
                 onClose={() => setDeleteDialogOpen(false)}
                 PaperProps={{
-                    sx: { background: '#1a1a2e', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 3, minWidth: 360 }
+                    sx: { background: '#0F0F1A', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 4, minWidth: 360 }
                 }}
             >
                 <DialogTitle sx={{ color: 'white', fontWeight: 700, pb: 1 }}>
@@ -325,7 +325,7 @@ const UsersTable = () => {
                 open={!!detailUser}
                 onClose={() => setDetailUser(null)}
                 PaperProps={{
-                    sx: { background: '#1a1a2e', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 3, minWidth: 420 }
+                    sx: { background: '#0F0F1A', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 4, minWidth: 420 }
                 }}
             >
                 {detailUser && (

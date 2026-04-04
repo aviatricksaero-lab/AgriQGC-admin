@@ -1,7 +1,6 @@
+# QGC (Agri) Admin Panel
 
-# QGC Admin Panel
-
-This is a React-based admin panel for visualizing QGroundControl user data.
+This is a React-based admin panel for visualizing QGC (Agri) user data.
 
 ## Setup
 
@@ -28,4 +27,4 @@ The app will run on **http://localhost:5173** (or similar).
 
 ## Backend Connection
 
-This app connects to the QGC backend running on `http://localhost:5000`. Ensure the backend server is running before starting the admin panel.
+This app connects to the QGC (Agri) backend running on `http://localhost:5000`. Ensure the backend server is running before starting the admin panel.
