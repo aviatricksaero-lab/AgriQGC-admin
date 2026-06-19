@@ -26,8 +26,22 @@ import toast from 'react-hot-toast';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-const cellSx = { borderBottom: '1px solid rgba(255,255,255,0.04)', color: 'text.primary', py: 1.5 };
-const headCellSx = { ...cellSx, color: 'text.secondary', fontWeight: 800, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.1em', background: 'rgba(255,255,255,0.02)' };
+// White theme cell styles
+const cellSx = { 
+    borderBottom: '1px solid rgba(0,0,0,0.08)', 
+    color: 'text.primary', 
+    py: 1.5 
+};
+
+const headCellSx = { 
+    ...cellSx, 
+    color: 'text.secondary', 
+    fontWeight: 800, 
+    fontSize: '0.72rem', 
+    textTransform: 'uppercase', 
+    letterSpacing: '0.1em', 
+    background: '#f8f9fa' 
+};
 
 const ZONE_TYPES = [
     { value: 'red', label: 'Red (Restricted)', color: '#EF4444' },
@@ -43,9 +57,9 @@ const getZoneChip = (type) => {
             label={z.label || type}
             size="small"
             sx={{
-                bgcolor: alpha(z.color, 0.15),
+                bgcolor: alpha(z.color, 0.08),
                 color: z.color,
-                border: `1px solid ${alpha(z.color, 0.35)}`,
+                border: `1px solid ${alpha(z.color, 0.2)}`,
                 fontWeight: 700,
                 fontSize: '0.7rem',
                 textTransform: 'capitalize',
@@ -222,11 +236,27 @@ const AirspaceManager = () => {
                 <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }} onClose={() => setError(null)}>{error}</Alert>
             )}
 
-            <Paper className="glass-card" sx={{ overflow: 'hidden', borderRadius: 4 }}>
+            <Paper sx={{ 
+                overflow: 'hidden', 
+                borderRadius: 4,
+                boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+                border: '1px solid rgba(0,0,0,0.06)',
+                bgcolor: '#ffffff'
+            }}>
                 {/* Header */}
-                <Box sx={{ p: 3, display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <Box sx={{ 
+                    p: 3, 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 2, 
+                    flexWrap: 'wrap', 
+                    borderBottom: '1px solid rgba(0,0,0,0.06)',
+                    bgcolor: '#fafafa'
+                }}>
                     <Box sx={{ flex: 1 }}>
-                        <Typography variant="h6" sx={{ fontWeight: 800, color: 'white', letterSpacing: '-0.02em' }}>Airspace Zones</Typography>
+                        <Typography variant="h6" sx={{ fontWeight: 800, color: '#1a1a1a', letterSpacing: '-0.02em' }}>
+                            Airspace Zones
+                        </Typography>
                         <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
                             {filtered.length} zones · Manage no-fly and restricted areas
                         </Typography>
@@ -241,9 +271,10 @@ const AirspaceManager = () => {
                         sx={{
                             width: 220,
                             '& .MuiOutlinedInput-root': {
-                                borderRadius: 2, bgcolor: 'rgba(255,255,255,0.04)',
-                                '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' },
-                                '&:hover fieldset': { borderColor: 'rgba(239,68,68,0.5)' },
+                                borderRadius: 2, 
+                                bgcolor: '#ffffff',
+                                '& fieldset': { borderColor: 'rgba(0,0,0,0.12)' },
+                                '&:hover fieldset': { borderColor: '#EF4444' },
                                 '&.Mui-focused fieldset': { borderColor: '#EF4444' },
                             },
                         }}
@@ -254,9 +285,10 @@ const AirspaceManager = () => {
                             value={filterZone}
                             onChange={e => { setFilterZone(e.target.value); setPage(0); }}
                             sx={{
-                                borderRadius: 2, bgcolor: 'rgba(255,255,255,0.04)',
-                                '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.1)' },
-                                '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(239,68,68,0.5)' },
+                                borderRadius: 2, 
+                                bgcolor: '#ffffff',
+                                '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(0,0,0,0.12)' },
+                                '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#EF4444' },
                                 '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#EF4444' },
                                 color: 'text.primary',
                             }}
@@ -267,17 +299,32 @@ const AirspaceManager = () => {
                     </FormControl>
 
                     <Tooltip title="Seed Test Data">
-                        <IconButton onClick={handleSeedData} disabled={seeding} size="small" sx={{ bgcolor: 'rgba(99,102,241,0.1)', color: '#818CF8', '&:hover': { bgcolor: 'rgba(99,102,241,0.2)' }, borderRadius: 2 }}>
+                        <IconButton onClick={handleSeedData} disabled={seeding} size="small" sx={{ 
+                            bgcolor: 'rgba(99,102,241,0.08)', 
+                            color: '#6366F1', 
+                            '&:hover': { bgcolor: 'rgba(99,102,241,0.15)' }, 
+                            borderRadius: 2 
+                        }}>
                             {seeding ? <CircularProgress size={16} color="inherit" /> : <SeedIcon fontSize="small" />}
                         </IconButton>
                     </Tooltip>
                     <Tooltip title="Export GeoJSON">
-                        <IconButton onClick={exportGeoJSON} size="small" sx={{ bgcolor: 'rgba(239,68,68,0.1)', color: '#EF4444', '&:hover': { bgcolor: 'rgba(239,68,68,0.2)' }, borderRadius: 2 }}>
+                        <IconButton onClick={exportGeoJSON} size="small" sx={{ 
+                            bgcolor: 'rgba(239,68,68,0.08)', 
+                            color: '#EF4444', 
+                            '&:hover': { bgcolor: 'rgba(239,68,68,0.15)' }, 
+                            borderRadius: 2 
+                        }}>
                             <DownloadIcon fontSize="small" />
                         </IconButton>
                     </Tooltip>
                     <Tooltip title="Refresh">
-                        <IconButton onClick={fetchFacilities} size="small" sx={{ bgcolor: 'rgba(239,68,68,0.1)', color: '#EF4444', '&:hover': { bgcolor: 'rgba(239,68,68,0.2)' }, borderRadius: 2 }}>
+                        <IconButton onClick={fetchFacilities} size="small" sx={{ 
+                            bgcolor: 'rgba(239,68,68,0.08)', 
+                            color: '#EF4444', 
+                            '&:hover': { bgcolor: 'rgba(239,68,68,0.15)' }, 
+                            borderRadius: 2 
+                        }}>
                             <RefreshIcon fontSize="small" />
                         </IconButton>
                     </Tooltip>
@@ -307,26 +354,34 @@ const AirspaceManager = () => {
                                 ? [...Array(5)].map((_, i) => (
                                     <TableRow key={i}>
                                         {[...Array(6)].map((_, j) => (
-                                            <TableCell key={j} sx={cellSx}><Skeleton variant="text" sx={{ bgcolor: 'rgba(255,255,255,0.04)' }} /></TableCell>
+                                            <TableCell key={j} sx={cellSx}>
+                                                <Skeleton variant="text" sx={{ bgcolor: 'rgba(0,0,0,0.04)' }} />
+                                            </TableCell>
                                         ))}
                                     </TableRow>
                                 ))
                                 : paginated.map((f) => {
                                     const zoneColor = ZONE_TYPES.find(z => z.value === f.zoneType)?.color || '#94A3B8';
                                     return (
-                                        <TableRow key={f._id} hover sx={{ '&:hover': { bgcolor: `${alpha(zoneColor, 0.05)} !important` } }}>
+                                        <TableRow key={f._id} hover sx={{ 
+                                            '&:hover': { bgcolor: `${alpha(zoneColor, 0.04)} !important` } 
+                                        }}>
                                             <TableCell sx={cellSx}>
                                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                                                     <Box sx={{
                                                         width: 10, height: 10, borderRadius: '50%',
                                                         bgcolor: zoneColor,
-                                                        boxShadow: `0 0 8px ${zoneColor}`,
+                                                        boxShadow: `0 0 8px ${zoneColor}40`,
                                                         flexShrink: 0,
                                                     }} />
                                                     <Box>
-                                                        <Typography variant="body2" sx={{ fontWeight: 600, color: 'white' }}>{f.name}</Typography>
+                                                        <Typography variant="body2" sx={{ fontWeight: 600, color: '#1a1a1a' }}>
+                                                            {f.name}
+                                                        </Typography>
                                                         {f.description && (
-                                                            <Typography variant="caption" sx={{ color: 'text.secondary' }}>{f.description}</Typography>
+                                                            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+                                                                {f.description}
+                                                            </Typography>
                                                         )}
                                                     </Box>
                                                 </Box>
@@ -344,9 +399,9 @@ const AirspaceManager = () => {
                                                     onClick={() => handleToggleActive(f)}
                                                     sx={{
                                                         cursor: 'pointer',
-                                                        bgcolor: f.isActive ? alpha('#10B981', 0.12) : alpha('#94A3B8', 0.12),
+                                                        bgcolor: f.isActive ? alpha('#10B981', 0.08) : alpha('#94A3B8', 0.08),
                                                         color: f.isActive ? '#10B981' : '#94A3B8',
-                                                        border: `1px solid ${f.isActive ? alpha('#10B981', 0.3) : alpha('#94A3B8', 0.2)}`,
+                                                        border: `1px solid ${f.isActive ? alpha('#10B981', 0.2) : alpha('#94A3B8', 0.15)}`,
                                                         fontWeight: 600, fontSize: '0.68rem',
                                                         '&:hover': { opacity: 0.8 },
                                                     }}
@@ -362,7 +417,7 @@ const AirspaceManager = () => {
                                                     <IconButton
                                                         size="small"
                                                         onClick={() => { setFacilityToDelete(f); setDeleteDialogOpen(true); }}
-                                                        sx={{ color: '#EF4444', '&:hover': { bgcolor: alpha('#EF4444', 0.1) } }}
+                                                        sx={{ color: '#EF4444', '&:hover': { bgcolor: alpha('#EF4444', 0.08) } }}
                                                     >
                                                         <DeleteIcon fontSize="small" />
                                                     </IconButton>
@@ -393,7 +448,11 @@ const AirspaceManager = () => {
                     page={page}
                     onPageChange={(_, p) => setPage(p)}
                     onRowsPerPageChange={e => { setRowsPerPage(+e.target.value); setPage(0); }}
-                    sx={{ borderTop: '1px solid rgba(255,255,255,0.06)', color: 'text.secondary' }}
+                    sx={{ 
+                        borderTop: '1px solid rgba(0,0,0,0.06)', 
+                        color: 'text.secondary',
+                        bgcolor: '#fafafa'
+                    }}
                 />
             </Paper>
 
@@ -403,16 +462,23 @@ const AirspaceManager = () => {
                 onClose={() => setAddDialogOpen(false)}
                 maxWidth="sm"
                 fullWidth
-                PaperProps={{ sx: { background: '#0A0A0F', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 4 } }}
+                PaperProps={{ 
+                    sx: { 
+                        background: '#ffffff', 
+                        border: '1px solid rgba(0,0,0,0.08)', 
+                        borderRadius: 4,
+                        boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
+                    } 
+                }}
             >
                 <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1.5, pb: 1 }}>
                     <MapIcon sx={{ color: '#EF4444' }} />
-                    <Typography variant="h6" sx={{ color: 'white', fontWeight: 700 }}>Add Airspace Zone</Typography>
+                    <Typography variant="h6" sx={{ color: '#1a1a1a', fontWeight: 700 }}>Add Airspace Zone</Typography>
                     <IconButton onClick={() => setAddDialogOpen(false)} size="small" sx={{ ml: 'auto', color: 'text.secondary' }}>
                         <CloseIcon fontSize="small" />
                     </IconButton>
                 </DialogTitle>
-                <Divider sx={{ borderColor: 'rgba(255,255,255,0.08)' }} />
+                <Divider sx={{ borderColor: 'rgba(0,0,0,0.06)' }} />
                 <DialogContent sx={{ pt: 3 }}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
@@ -461,19 +527,59 @@ const AirspaceManager = () => {
                             </Typography>
                         </Grid>
                         <Grid item xs={12} sm={4}>
-                            <TextField label="Latitude" fullWidth size="small" value={form.lat} onChange={e => setForm(p => ({ ...p, lat: e.target.value }))} placeholder="e.g. 28.6139" sx={inputSx} />
+                            <TextField 
+                                label="Latitude" 
+                                fullWidth 
+                                size="small" 
+                                value={form.lat} 
+                                onChange={e => setForm(p => ({ ...p, lat: e.target.value }))} 
+                                placeholder="e.g. 28.6139" 
+                                sx={inputSx} 
+                            />
                         </Grid>
                         <Grid item xs={12} sm={4}>
-                            <TextField label="Longitude" fullWidth size="small" value={form.lon} onChange={e => setForm(p => ({ ...p, lon: e.target.value }))} placeholder="e.g. 77.2090" sx={inputSx} />
+                            <TextField 
+                                label="Longitude" 
+                                fullWidth 
+                                size="small" 
+                                value={form.lon} 
+                                onChange={e => setForm(p => ({ ...p, lon: e.target.value }))} 
+                                placeholder="e.g. 77.2090" 
+                                sx={inputSx} 
+                            />
                         </Grid>
                         <Grid item xs={12} sm={4}>
-                            <TextField label="Radius (km)" fullWidth size="small" type="number" value={form.radiusKm} onChange={e => setForm(p => ({ ...p, radiusKm: e.target.value }))} sx={inputSx} />
+                            <TextField 
+                                label="Radius (km)" 
+                                fullWidth 
+                                size="small" 
+                                type="number" 
+                                value={form.radiusKm} 
+                                onChange={e => setForm(p => ({ ...p, radiusKm: e.target.value }))} 
+                                sx={inputSx} 
+                            />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <TextField label="Min Altitude (m AGL)" fullWidth size="small" type="number" value={form.minAltitude} onChange={e => setForm(p => ({ ...p, minAltitude: e.target.value }))} sx={inputSx} />
+                            <TextField 
+                                label="Min Altitude (m AGL)" 
+                                fullWidth 
+                                size="small" 
+                                type="number" 
+                                value={form.minAltitude} 
+                                onChange={e => setForm(p => ({ ...p, minAltitude: e.target.value }))} 
+                                sx={inputSx} 
+                            />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <TextField label="Max Altitude (m AGL)" fullWidth size="small" type="number" value={form.maxAltitude} onChange={e => setForm(p => ({ ...p, maxAltitude: e.target.value }))} sx={inputSx} />
+                            <TextField 
+                                label="Max Altitude (m AGL)" 
+                                fullWidth 
+                                size="small" 
+                                type="number" 
+                                value={form.maxAltitude} 
+                                onChange={e => setForm(p => ({ ...p, maxAltitude: e.target.value }))} 
+                                sx={inputSx} 
+                            />
                         </Grid>
                         <Grid item xs={12}>
                             <FormControlLabel
@@ -481,7 +587,11 @@ const AirspaceManager = () => {
                                     <Switch
                                         checked={form.active}
                                         onChange={e => setForm(p => ({ ...p, active: e.target.checked }))}
-                                        sx={{ '& .MuiSwitch-thumb': { bgcolor: form.active ? '#10B981' : '#94A3B8' } }}
+                                        sx={{ 
+                                            '& .MuiSwitch-thumb': { 
+                                                bgcolor: form.active ? '#10B981' : '#94A3B8' 
+                                            } 
+                                        }}
                                     />
                                 }
                                 label={<Typography variant="body2" sx={{ color: 'text.secondary' }}>Active Zone</Typography>}
@@ -507,12 +617,20 @@ const AirspaceManager = () => {
             <Dialog
                 open={deleteDialogOpen}
                 onClose={() => setDeleteDialogOpen(false)}
-                PaperProps={{ sx: { background: '#0A0A0F', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 4, minWidth: 360 } }}
+                PaperProps={{ 
+                    sx: { 
+                        background: '#ffffff', 
+                        border: '1px solid rgba(0,0,0,0.08)', 
+                        borderRadius: 4, 
+                        minWidth: 360,
+                        boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
+                    } 
+                }}
             >
-                <DialogTitle sx={{ color: 'white', fontWeight: 700 }}>Delete Zone?</DialogTitle>
+                <DialogTitle sx={{ color: '#1a1a1a', fontWeight: 700 }}>Delete Zone?</DialogTitle>
                 <DialogContent>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        Are you sure you want to delete zone <strong style={{ color: 'white' }}>{facilityToDelete?.name}</strong>?
+                        Are you sure you want to delete zone <strong style={{ color: '#1a1a1a' }}>{facilityToDelete?.name}</strong>?
                         This will remove it from QGC's airspace overlay.
                     </Typography>
                 </DialogContent>
@@ -534,22 +652,25 @@ const AirspaceManager = () => {
 
 const inputSx = {
     '& .MuiOutlinedInput-root': {
-        borderRadius: 2, bgcolor: 'rgba(255,255,255,0.03)',
-        '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' },
+        borderRadius: 2, 
+        bgcolor: 'rgba(0,0,0,0.02)',
+        '& fieldset': { borderColor: 'rgba(0,0,0,0.12)' },
         '&:hover fieldset': { borderColor: 'rgba(239,68,68,0.4)' },
         '&.Mui-focused fieldset': { borderColor: '#EF4444' },
-        color: 'white',
+        color: '#1a1a1a',
     },
-    '& .MuiInputLabel-root': { color: '#94A3B8' },
+    '& .MuiInputLabel-root': { color: '#64748B' },
     '& .MuiInputLabel-root.Mui-focused': { color: '#EF4444' },
 };
 
 const selectSx = {
-    borderRadius: 2, bgcolor: 'rgba(255,255,255,0.03)', color: 'white',
-    '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,0.1)' },
+    borderRadius: 2, 
+    bgcolor: 'rgba(0,0,0,0.02)', 
+    color: '#1a1a1a',
+    '& .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(0,0,0,0.12)' },
     '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(239,68,68,0.4)' },
     '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#EF4444' },
-    '& .MuiSvgIcon-root': { color: '#94A3B8' },
+    '& .MuiSvgIcon-root': { color: '#64748B' },
 };
 
 export default AirspaceManager;

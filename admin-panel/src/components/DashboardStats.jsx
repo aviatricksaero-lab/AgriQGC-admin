@@ -264,7 +264,12 @@ const DashboardStats = () => {
     ];
 
     return (
-        <Box sx={{ background: '#F8FAFC', minHeight: '100vh', p: { xs: 2, md: 3 } }}>
+        <Box sx={{ 
+            background: '#F8FAFC', 
+            minHeight: '100vh', 
+            p: { xs: 2, md: 3 },
+            borderRadius: '24px 24px 0 0',
+        }}>
             {error && (
                 <Alert
                     severity="error"

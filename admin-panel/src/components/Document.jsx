@@ -140,7 +140,8 @@ export default function DocumentManagement() {
       {notification.message && (
         <div style={{
           ...styles.notification,
-          backgroundColor: notification.type === 'error' ? '#dc3545' : '#28a745'
+          backgroundColor: notification.type === 'error' ? '#fee2e2' : '#d1fae5',
+          color: notification.type === 'error' ? '#991b1b' : '#065f46'
         }}>
           <span style={styles.notificationIcon}>
             {notification.type === 'error' ? '❌' : '✅'}
@@ -158,8 +159,8 @@ export default function DocumentManagement() {
           </div>
           <span style={{
             ...styles.statusBadge,
-            backgroundColor: privacyDoc ? '#28a745' : '#ffc107',
-            color: privacyDoc ? 'white' : '#333'
+            backgroundColor: privacyDoc ? '#10b981' : '#f59e0b',
+            color: 'white'
           }}>
             {privacyDoc ? '✅ Uploaded' : '⚠️ Not Uploaded'}
           </span>
@@ -245,8 +246,8 @@ export default function DocumentManagement() {
           </div>
           <span style={{
             ...styles.statusBadge,
-            backgroundColor: termsDoc ? '#28a745' : '#ffc107',
-            color: termsDoc ? 'white' : '#333'
+            backgroundColor: termsDoc ? '#10b981' : '#f59e0b',
+            color: 'white'
           }}>
             {termsDoc ? '✅ Uploaded' : '⚠️ Not Uploaded'}
           </span>
@@ -326,43 +327,42 @@ export default function DocumentManagement() {
   );
 }
 
-// Dark Theme Styles - Matching QGC Admin Dashboard
+// White Theme Styles - Clean & Modern
 const styles = {
   container: {
     padding: "24px",
     maxWidth: "1200px",
     margin: "0 auto",
     fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-    backgroundColor: "#0a0e17",
+    backgroundColor: "#f8fafc",
     minHeight: "100vh",
-    color: "#e0e0e0"
+    color: "#1e293b"
   },
   header: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: "30px",
-    padding: "20px 24px",
-    background: "linear-gradient(135deg, #0d1b2a 0%, #1a1a2e 100%)",
-    borderRadius: "12px",
-    border: "1px solid #1e2d45",
-    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.4)"
+    padding: "24px 28px",
+    background: "#ffffff",
+    borderRadius: "16px",
+    border: "1px solid #e2e8f0",
+    boxShadow: "0 1px 3px rgba(0, 0, 0, 0.06)"
   },
   headerTitle: {
     margin: 0,
     fontSize: "28px",
     fontWeight: "700",
-    color: "#ffffff",
+    color: "#0f172a",
     letterSpacing: "-0.5px"
   },
   headerSubtitle: {
     margin: "8px 0 0 0",
     fontSize: "14px",
-    color: "#8899bb",
+    color: "#64748b",
     fontWeight: "400"
   },
   notification: {
-    color: "white",
     padding: "14px 20px",
     borderRadius: "10px",
     marginBottom: "20px",
@@ -371,19 +371,20 @@ const styles = {
     gap: "12px",
     fontSize: "14px",
     fontWeight: "500",
-    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)"
+    boxShadow: "0 1px 3px rgba(0, 0, 0, 0.06)",
+    border: "1px solid rgba(0,0,0,0.06)"
   },
   notificationIcon: {
     fontSize: "18px"
   },
   card: {
-    background: "linear-gradient(135deg, #0d1b2a 0%, #1a1a2e 100%)",
+    background: "#ffffff",
     padding: "28px",
-    borderRadius: "12px",
+    borderRadius: "16px",
     marginBottom: "24px",
-    border: "1px solid #1e2d45",
-    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
-    transition: "all 0.3s ease"
+    border: "1px solid #e2e8f0",
+    boxShadow: "0 1px 3px rgba(0, 0, 0, 0.06)",
+    transition: "all 0.2s ease"
   },
   cardHeader: {
     display: "flex",
@@ -391,7 +392,7 @@ const styles = {
     alignItems: "center",
     marginBottom: "24px",
     paddingBottom: "16px",
-    borderBottom: "1px solid #1e2d45"
+    borderBottom: "1px solid #f1f5f9"
   },
   cardTitleWrapper: {
     display: "flex",
@@ -403,7 +404,7 @@ const styles = {
   },
   cardTitle: {
     margin: 0,
-    color: "#ffffff",
+    color: "#0f172a",
     fontSize: "20px",
     fontWeight: "600"
   },
@@ -426,16 +427,20 @@ const styles = {
     alignItems: "center",
     gap: "10px",
     padding: "12px 20px",
-    background: "#0d1b2a",
-    color: "#8899bb",
-    borderRadius: "8px",
+    background: "#f8fafc",
+    color: "#64748b",
+    borderRadius: "10px",
     cursor: "pointer",
     transition: "all 0.2s ease",
-    border: "2px dashed #1e2d45",
+    border: "2px dashed #e2e8f0",
     width: "100%",
     boxSizing: "border-box",
     fontSize: "14px",
-    fontWeight: "400"
+    fontWeight: "400",
+    '&:hover': {
+      borderColor: '#4f46e5',
+      background: '#f1f5f9'
+    }
   },
   fileIcon: {
     fontSize: "18px"
@@ -449,57 +454,69 @@ const styles = {
   },
   uploadBtn: {
     padding: "10px 28px",
-    background: "linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)",
+    background: "#4f46e5",
     color: "white",
     border: "none",
-    borderRadius: "8px",
+    borderRadius: "10px",
     cursor: "pointer",
     fontWeight: "600",
     fontSize: "14px",
     transition: "all 0.2s ease",
-    boxShadow: "0 4px 12px rgba(79, 70, 229, 0.3)"
+    boxShadow: "0 4px 12px rgba(79, 70, 229, 0.2)",
+    '&:hover': {
+      transform: 'translateY(-2px)',
+      boxShadow: '0 6px 20px rgba(79, 70, 229, 0.3)'
+    }
   },
   viewBtn: {
     padding: "10px 28px",
-    background: "linear-gradient(135deg, #059669 0%, #10b981 100%)",
+    background: "#10b981",
     color: "white",
     textDecoration: "none",
-    borderRadius: "8px",
+    borderRadius: "10px",
     fontWeight: "600",
     fontSize: "14px",
     transition: "all 0.2s ease",
-    boxShadow: "0 4px 12px rgba(5, 150, 105, 0.3)",
-    display: "inline-block"
+    boxShadow: "0 4px 12px rgba(16, 185, 129, 0.2)",
+    display: "inline-block",
+    '&:hover': {
+      transform: 'translateY(-2px)',
+      boxShadow: '0 6px 20px rgba(16, 185, 129, 0.3)'
+    }
   },
   deleteBtn: {
     padding: "10px 28px",
-    background: "linear-gradient(135deg, #dc2626 0%, #ef4444 100%)",
+    background: "#ef4444",
     color: "white",
     border: "none",
-    borderRadius: "8px",
+    borderRadius: "10px",
     cursor: "pointer",
     fontWeight: "600",
     fontSize: "14px",
     transition: "all 0.2s ease",
-    boxShadow: "0 4px 12px rgba(220, 38, 38, 0.3)"
+    boxShadow: "0 4px 12px rgba(239, 68, 68, 0.2)",
+    '&:hover': {
+      transform: 'translateY(-2px)',
+      boxShadow: '0 6px 20px rgba(239, 68, 68, 0.3)'
+    }
   },
   fileInfo: {
     marginLeft: "auto",
-    color: "#667799",
+    color: "#94a3b8",
     fontSize: "13px",
     fontWeight: "400"
   },
   fileDetails: {
     marginTop: "16px",
     padding: "12px 16px",
-    background: "#0d1b2a",
-    borderRadius: "8px",
-    color: "#8899bb",
+    background: "#f8fafc",
+    borderRadius: "10px",
+    color: "#64748b",
     fontSize: "14px",
     display: "flex",
     alignItems: "center",
     gap: "10px",
-    border: "1px solid #1e2d45"
+    border: "1px solid #f1f5f9"
   },
   fileDetailIcon: {
     fontSize: "16px"
@@ -507,7 +524,7 @@ const styles = {
   progressContainer: {
     width: "100%",
     height: "6px",
-    backgroundColor: "#0d1b2a",
+    backgroundColor: "#f1f5f9",
     borderRadius: "3px",
     overflow: "hidden",
     marginTop: "12px",
@@ -526,18 +543,6 @@ const styles = {
     transform: "translateY(-50%)",
     fontSize: "10px",
     fontWeight: "600",
-    color: "#667799"
+    color: "#94a3b8"
   }
 };
-
-// Hover effects for buttons
-const buttonHoverStyles = `
-  .upload-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4); }
-  .view-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4); }
-  .delete-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4); }
-`;
-
-// Add hover styles to document
-const styleElement = document.createElement('style');
-styleElement.textContent = buttonHoverStyles;
-document.head.appendChild(styleElement);

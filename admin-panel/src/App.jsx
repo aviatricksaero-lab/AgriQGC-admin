@@ -50,9 +50,9 @@ import GlobalMapViewer from './components/GlobalMapViewer';
 const drawerWidth = 260;
 const collapsedWidth = 72;
 
-const darkTheme = createTheme({
+const lightTheme = createTheme({
     palette: {
-        mode: 'dark',
+        mode: 'light',
         primary: {
             main: '#10B981', // Emerald - Agri vibe
             light: '#34D399',
@@ -63,12 +63,12 @@ const darkTheme = createTheme({
             light: '#818CF8',
         },
         background: {
-            default: '#0A0A0F',
-            paper: '#12121A',
+            default: '#F1F5F9',
+            paper: '#FFFFFF',
         },
         text: {
-            primary: '#F8FAFC',
-            secondary: '#94A3B8',
+            primary: '#0F172A',
+            secondary: '#64748B',
         },
     },
     typography: {
@@ -86,8 +86,8 @@ const darkTheme = createTheme({
             styleOverrides: {
                 root: {
                     backgroundImage: 'none',
-                    border: '1px solid rgba(255,255,255,0.05)',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
+                    border: '1px solid #E2E8F0',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
                 },
             },
         },
@@ -100,7 +100,7 @@ const darkTheme = createTheme({
                     padding: '8px 20px',
                     boxShadow: 'none',
                     '&:hover': {
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
                     },
                 },
             },
@@ -110,6 +110,14 @@ const darkTheme = createTheme({
                 root: {
                     borderRadius: 8,
                     fontWeight: 700,
+                },
+            },
+        },
+        MuiAppBar: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: '#FFFFFF',
+                    borderBottom: '1px solid #E2E8F0',
                 },
             },
         },
@@ -135,7 +143,7 @@ function Navigation({ children }) {
     const currentMenuItem = menuItems.find(item => item.path === location.pathname) || menuItems[0];
 
     return (
-        <Box sx={{ display: 'flex', minHeight: '100vh', background: 'radial-gradient(circle at top right, #111827, #0A0A0F)' }}>
+        <Box sx={{ display: 'flex', minHeight: '100vh', background: '#F1F5F9' }}>
             <CssBaseline />
 
             {/* Sidebar */}
@@ -148,12 +156,13 @@ function Navigation({ children }) {
                     '& .MuiDrawer-paper': {
                         width: collapsed ? collapsedWidth : drawerWidth,
                         boxSizing: 'border-box',
-                        background: 'rgba(18, 18, 26, 0.7)',
+                        background: '#FFFFFF',
                         backdropFilter: 'blur(16px)',
                         border: 'none',
-                        borderRight: '1px solid rgba(255,255,255,0.08)',
+                        borderRight: '1px solid #E2E8F0',
                         transition: 'width 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                         overflow: 'hidden',
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
                     },
                 }}
             >
@@ -164,7 +173,7 @@ function Navigation({ children }) {
                     px: 2,
                     py: 2.5,
                     gap: 1.5,
-                    borderBottom: '1px solid rgba(255,255,255,0.06)',
+                    borderBottom: '1px solid #E2E8F0',
                     minHeight: 70,
                 }}>
                     <Box sx={{
@@ -176,13 +185,13 @@ function Navigation({ children }) {
                         alignItems: 'center',
                         justifyContent: 'center',
                         flexShrink: 0,
-                        boxShadow: '0 4px 15px rgba(16, 185, 129, 0.4)',
+                        boxShadow: '0 4px 15px rgba(16, 185, 129, 0.3)',
                     }}>
                         <ShieldIcon sx={{ color: 'white', fontSize: 20 }} />
                     </Box>
                     {!collapsed && (
                         <Box>
-                            <Typography variant="subtitle1" sx={{ color: 'white', fontWeight: 800, lineHeight: 1.2, fontSize: '0.95rem' }}>
+                            <Typography variant="subtitle1" sx={{ color: '#0F172A', fontWeight: 800, lineHeight: 1.2, fontSize: '0.95rem' }}>
                                 QGC (Agri)
                             </Typography>
                             <Typography variant="caption" sx={{ color: '#10B981', fontWeight: 700, letterSpacing: '0.08em', fontSize: '0.65rem' }}>
@@ -194,7 +203,7 @@ function Navigation({ children }) {
                         <IconButton
                             onClick={() => setCollapsed(true)}
                             size="small"
-                            sx={{ ml: 'auto', color: 'text.secondary', '&:hover': { color: 'white' } }}
+                            sx={{ ml: 'auto', color: 'text.secondary', '&:hover': { color: '#0F172A' } }}
                         >
                             <ChevronLeftIcon fontSize="small" />
                         </IconButton>
@@ -206,7 +215,7 @@ function Navigation({ children }) {
                         <IconButton
                             onClick={() => setCollapsed(false)}
                             size="small"
-                            sx={{ color: 'text.secondary', '&:hover': { color: 'white' } }}
+                            sx={{ color: 'text.secondary', '&:hover': { color: '#0F172A' } }}
                         >
                             <MenuIcon fontSize="small" />
                         </IconButton>
@@ -235,18 +244,18 @@ function Navigation({ children }) {
                                                 px: collapsed ? 1 : 1.5,
                                                 justifyContent: collapsed ? 'center' : 'flex-start',
                                                 background: isActive
-                                                    ? `linear-gradient(135deg, ${alpha(item.color, 0.25)}, ${alpha(item.color, 0.1)})`
+                                                    ? `linear-gradient(135deg, ${alpha(item.color, 0.12)}, ${alpha(item.color, 0.04)})`
                                                     : 'transparent',
                                                 border: isActive ? `1px solid ${alpha(item.color, 0.3)}` : '1px solid transparent',
                                                 '&:hover': {
-                                                    background: `linear-gradient(135deg, ${alpha(item.color, 0.2)}, ${alpha(item.color, 0.08)})`,
-                                                    border: `1px solid ${alpha(item.color, 0.25)}`,
+                                                    background: `linear-gradient(135deg, ${alpha(item.color, 0.08)}, ${alpha(item.color, 0.02)})`,
+                                                    border: `1px solid ${alpha(item.color, 0.2)}`,
                                                 },
                                                 '&.Mui-selected': {
-                                                    background: `linear-gradient(135deg, ${alpha(item.color, 0.25)}, ${alpha(item.color, 0.1)})`,
+                                                    background: `linear-gradient(135deg, ${alpha(item.color, 0.12)}, ${alpha(item.color, 0.04)})`,
                                                 },
                                                 '&.Mui-selected:hover': {
-                                                    background: `linear-gradient(135deg, ${alpha(item.color, 0.3)}, ${alpha(item.color, 0.15)})`,
+                                                    background: `linear-gradient(135deg, ${alpha(item.color, 0.16)}, ${alpha(item.color, 0.06)})`,
                                                 },
                                                 transition: 'all 0.2s ease',
                                             }}
@@ -264,7 +273,7 @@ function Navigation({ children }) {
                                                     primaryTypographyProps={{
                                                         fontWeight: isActive ? 700 : 500,
                                                         fontSize: '0.88rem',
-                                                        color: isActive ? 'white' : 'text.secondary',
+                                                        color: isActive ? '#0F172A' : 'text.secondary',
                                                     }}
                                                 />
                                             )}
@@ -288,7 +297,7 @@ function Navigation({ children }) {
                 {/* Footer */}
                 <Box sx={{
                     p: 2,
-                    borderTop: '1px solid rgba(255,255,255,0.06)',
+                    borderTop: '1px solid #E2E8F0',
                 }}>
                     {!collapsed ? (
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, px: 1 }}>
@@ -298,12 +307,13 @@ function Navigation({ children }) {
                                 background: 'linear-gradient(135deg, #10B981, #6366F1)',
                                 fontSize: '0.8rem',
                                 fontWeight: 700,
-                                border: '2px solid rgba(255,255,255,0.1)',
+                                color: 'white',
+                                border: '2px solid rgba(16, 185, 129, 0.2)',
                             }}>
                                 A
                             </Avatar>
                             <Box>
-                                <Typography variant="caption" sx={{ color: 'white', fontWeight: 700, display: 'block' }}>
+                                <Typography variant="caption" sx={{ color: '#0F172A', fontWeight: 700, display: 'block' }}>
                                     Admin
                                 </Typography>
                                 <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.7rem' }}>
@@ -318,7 +328,8 @@ function Navigation({ children }) {
                                 height: 32,
                                 background: 'linear-gradient(135deg, #10B981, #6366F1)',
                                 fontSize: '0.8rem',
-                                border: '2px solid rgba(255,255,255,0.1)',
+                                color: 'white',
+                                border: '2px solid rgba(16, 185, 129, 0.2)',
                             }}>
                                 A
                             </Avatar>
@@ -334,14 +345,15 @@ function Navigation({ children }) {
                     position="static"
                     elevation={0}
                     sx={{
-                        background: 'rgba(22, 22, 39, 0.8)',
+                        background: '#FFFFFF',
                         backdropFilter: 'blur(12px)',
-                        borderBottom: '1px solid rgba(255,255,255,0.06)',
+                        borderBottom: '1px solid #E2E8F0',
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
                     }}
                 >
                     <Toolbar sx={{ gap: 1 }}>
                         <Box sx={{ flex: 1 }}>
-                            <Typography variant="h6" sx={{ fontWeight: 800, color: 'white', fontSize: '1.2rem', letterSpacing: '-0.02em' }}>
+                            <Typography variant="h6" sx={{ fontWeight: 800, color: '#0F172A', fontSize: '1.2rem', letterSpacing: '-0.02em' }}>
                                 {currentMenuItem.text}
                             </Typography>
                             <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
@@ -352,9 +364,9 @@ function Navigation({ children }) {
                             label="Live"
                             size="small"
                             sx={{
-                                bgcolor: alpha('#10B981', 0.15),
+                                bgcolor: alpha('#10B981', 0.08),
                                 color: '#10B981',
-                                border: `1px solid ${alpha('#10B981', 0.3)}`,
+                                border: `1px solid ${alpha('#10B981', 0.2)}`,
                                 '& .MuiChip-label': { fontWeight: 600, fontSize: '0.7rem' },
                                 '&::before': {
                                     content: '""',
@@ -382,16 +394,17 @@ function Navigation({ children }) {
 
 function App() {
     return (
-        <ThemeProvider theme={darkTheme}>
+        <ThemeProvider theme={lightTheme}>
             <Router>
                 <Toaster
                     position="top-right"
                     toastOptions={{
                         style: {
-                            background: '#1e1e35',
-                            color: '#F1F5F9',
-                            border: '1px solid rgba(255,255,255,0.1)',
+                            background: '#FFFFFF',
+                            color: '#0F172A',
+                            border: '1px solid #E2E8F0',
                             borderRadius: '10px',
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
                         },
                     }}
                 />

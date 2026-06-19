@@ -386,11 +386,11 @@ function MissionMap({ mission }) {
 // ── Small stat pill ───────────────────────────────────────────────────────────
 function Pill({ icon, label, value, color = '#10B981' }) {
     return (
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, px: 1.2, py: 0.6, bgcolor: alpha(color, 0.1), border: `1px solid ${alpha(color, 0.25)}`, borderRadius: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8, px: 1.2, py: 0.6, bgcolor: alpha(color, 0.08), border: `1px solid ${alpha(color, 0.2)}`, borderRadius: 2 }}>
             <Box sx={{ color, display: 'flex' }}>{icon}</Box>
             <Box>
                 <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', lineHeight: 1, fontSize: '0.63rem' }}>{label}</Typography>
-                <Typography variant="body2" sx={{ color: 'white', fontWeight: 700, lineHeight: 1.3, fontSize: '0.78rem' }}>{value}</Typography>
+                <Typography variant="body2" sx={{ color: '#1a1a1a', fontWeight: 700, lineHeight: 1.3, fontSize: '0.78rem' }}>{value}</Typography>
             </Box>
         </Box>
     );
@@ -469,31 +469,31 @@ const MissionViewer = () => {
     const totalDist = useMemo(() => calcDistance(effectiveSelWps), [effectiveSelWps]);
     const maxAlt = useMemo(() => effectiveSelWps.length ? Math.max(...effectiveSelWps.map(w => w.alt)) : 0, [effectiveSelWps]);
 
-    const panelBg = 'rgba(13,13,20,0.97)';
-    const borderColor = 'rgba(255,255,255,0.07)';
+    const panelBg = '#ffffff';
+    const borderColor = 'rgba(0,0,0,0.08)';
 
     return (
         <Box sx={{ display: 'flex', gap: 1.5, height: 'calc(100vh - 130px)', minHeight: 520 }}>
 
             {/* ═══════════════════════════════ PANEL 1: USERS ═══════════════════════════════ */}
-            <Paper sx={{ width: 220, flexShrink: 0, display: 'flex', flexDirection: 'column', borderRadius: 3, overflow: 'hidden', border: `1px solid ${borderColor}`, background: panelBg }}>
+            <Paper sx={{ width: 220, flexShrink: 0, display: 'flex', flexDirection: 'column', borderRadius: 3, overflow: 'hidden', border: `1px solid ${borderColor}`, background: panelBg, boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
                 
                 <Box sx={{ p: 1.5, borderBottom: `1px solid ${borderColor}` }}>
-                    <Typography variant="subtitle2" sx={{ color: 'white', fontWeight: 800, mb: 1 }}>
+                    <Typography variant="subtitle2" sx={{ color: '#1a1a1a', fontWeight: 800, mb: 1 }}>
                         👤 Pilots
                     </Typography>
                     <TextField
                         size="small" fullWidth placeholder="Search pilots..."
                         value={userSearch} onChange={e => { setUserSearch(e.target.value); setSelectedUser(null); setSelectedMission(null); }}
                         InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon sx={{ fontSize: 14, color: 'text.secondary' }} /></InputAdornment> }}
-                        sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2, bgcolor: 'rgba(255,255,255,0.04)', fontSize: '0.8rem', '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' }, '&.Mui-focused fieldset': { borderColor: '#10B981' } } }}
+                        sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2, bgcolor: 'rgba(0,0,0,0.02)', fontSize: '0.8rem', '& fieldset': { borderColor: 'rgba(0,0,0,0.12)' }, '&.Mui-focused fieldset': { borderColor: '#10B981' } } }}
                     />
                 </Box>
 
                 <Box sx={{ flex: 1, overflowY: 'auto', px: 1 }}>
                     {error && <Alert severity="error" sx={{ m: 0.5, fontSize: '0.75rem' }}>{error}</Alert>}
                     {loading
-                        ? [...Array(4)].map((_, i) => <Skeleton key={i} variant="rounded" height={56} sx={{ mb: 0.5, bgcolor: 'rgba(255,255,255,0.04)' }} />)
+                        ? [...Array(4)].map((_, i) => <Skeleton key={i} variant="rounded" height={56} sx={{ mb: 0.5, bgcolor: 'rgba(0,0,0,0.04)' }} />)
                         : userGroups.map(([username, plans]) => {
                             const isActive = selectedUser === username;
                             return (
@@ -501,15 +501,15 @@ const MissionViewer = () => {
                                     sx={{
                                         display: 'flex', alignItems: 'center', gap: 1, p: 1.2, mb: 0.4,
                                         borderRadius: 2, cursor: 'pointer', transition: 'all 0.18s',
-                                        background: isActive ? `linear-gradient(135deg, ${alpha('#10B981', 0.18)}, ${alpha('#6366F1', 0.1)})` : 'rgba(255,255,255,0.03)',
-                                        border: `1px solid ${isActive ? alpha('#10B981', 0.5) : 'transparent'}`,
-                                        '&:hover': { background: 'rgba(255,255,255,0.07)', border: `1px solid ${alpha('#10B981', 0.3)}` }
+                                        background: isActive ? `linear-gradient(135deg, ${alpha('#10B981', 0.12)}, ${alpha('#6366F1', 0.06)})` : 'rgba(0,0,0,0.02)',
+                                        border: `1px solid ${isActive ? alpha('#10B981', 0.4) : 'transparent'}`,
+                                        '&:hover': { background: 'rgba(0,0,0,0.05)', border: `1px solid ${alpha('#10B981', 0.25)}` }
                                     }}>
-                                    <Avatar sx={{ width: 32, height: 32, fontSize: '0.75rem', fontWeight: 800, background: isActive ? 'linear-gradient(135deg,#10B981,#6366F1)' : 'rgba(99,102,241,0.3)', border: isActive ? '2px solid #10B981' : 'none' }}>
+                                    <Avatar sx={{ width: 32, height: 32, fontSize: '0.75rem', fontWeight: 800, background: isActive ? 'linear-gradient(135deg,#10B981,#6366F1)' : 'rgba(99,102,241,0.15)', border: isActive ? '2px solid #10B981' : 'none', color: isActive ? 'white' : '#6366F1' }}>
                                         {username[0].toUpperCase()}
                                     </Avatar>
                                     <Box sx={{ flex: 1, minWidth: 0 }}>
-                                        <Typography variant="body2" sx={{ fontWeight: 700, color: isActive ? '#10B981' : 'white', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: '0.82rem' }}>
+                                        <Typography variant="body2" sx={{ fontWeight: 700, color: isActive ? '#10B981' : '#1a1a1a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: '0.82rem' }}>
                                             {username}
                                         </Typography>
                                         <Typography variant="caption" sx={{ color: 'text.secondary', fontSize: '0.67rem' }}>
@@ -525,10 +525,10 @@ const MissionViewer = () => {
             </Paper>
 
             {/* ═══════════════════════════════ PANEL 2: PLANS ═══════════════════════════════ */}
-            <Paper sx={{ width: 260, flexShrink: 0, display: 'flex', flexDirection: 'column', borderRadius: 3, overflow: 'hidden', border: `1px solid ${borderColor}`, background: panelBg, transition: 'all 0.2s' }}>
+            <Paper sx={{ width: 260, flexShrink: 0, display: 'flex', flexDirection: 'column', borderRadius: 3, overflow: 'hidden', border: `1px solid ${borderColor}`, background: panelBg, transition: 'all 0.2s', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
                 {!selectedUser ? (
                     <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 1.5, p: 3 }}>
-                        <PersonIcon sx={{ fontSize: 44, color: alpha('#10B981', 0.3) }} />
+                        <PersonIcon sx={{ fontSize: 44, color: alpha('#10B981', 0.2) }} />
                         <Typography variant="body2" sx={{ color: 'text.secondary', textAlign: 'center' }}>
                             Select a pilot to see their mission plans
                         </Typography>
@@ -537,7 +537,7 @@ const MissionViewer = () => {
                     <>
                         <Box sx={{ p: 2, borderBottom: `1px solid ${borderColor}` }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.2 }}>
-                                <Avatar sx={{ width: 26, height: 26, fontSize: '0.7rem', background: 'linear-gradient(135deg,#10B981,#6366F1)', fontWeight: 800 }}>
+                                <Avatar sx={{ width: 26, height: 26, fontSize: '0.7rem', background: 'linear-gradient(135deg,#10B981,#6366F1)', fontWeight: 800, color: 'white' }}>
                                     {selectedUser[0].toUpperCase()}
                                 </Avatar>
                                 <Box>
@@ -549,7 +549,7 @@ const MissionViewer = () => {
                                 size="small" fullWidth placeholder="Search plans..."
                                 value={planSearch} onChange={e => setPlanSearch(e.target.value)}
                                 InputProps={{ startAdornment: <InputAdornment position="start"><SearchIcon sx={{ fontSize: 14, color: 'text.secondary' }} /></InputAdornment> }}
-                                sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2, bgcolor: 'rgba(255,255,255,0.04)', fontSize: '0.8rem', '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' }, '&.Mui-focused fieldset': { borderColor: '#10B981' } } }}
+                                sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2, bgcolor: 'rgba(0,0,0,0.02)', fontSize: '0.8rem', '& fieldset': { borderColor: 'rgba(0,0,0,0.12)' }, '&.Mui-focused fieldset': { borderColor: '#10B981' } } }}
                             />
                         </Box>
 
@@ -565,16 +565,16 @@ const MissionViewer = () => {
                                             sx={{
                                                 p: 1.3, mb: 0.5, borderRadius: 2, cursor: 'pointer',
                                                 transition: 'all 0.18s',
-                                                background: isActive ? `linear-gradient(135deg, ${alpha('#10B981', 0.15)}, ${alpha('#6366F1', 0.07)})` : 'rgba(255,255,255,0.03)',
-                                                border: `1px solid ${isActive ? alpha('#10B981', 0.5) : 'transparent'}`,
-                                                '&:hover': { background: 'rgba(255,255,255,0.07)', border: `1px solid ${alpha('#10B981', 0.3)}` }
+                                                background: isActive ? `linear-gradient(135deg, ${alpha('#10B981', 0.1)}, ${alpha('#6366F1', 0.04)})` : 'rgba(0,0,0,0.02)',
+                                                border: `1px solid ${isActive ? alpha('#10B981', 0.4) : 'transparent'}`,
+                                                '&:hover': { background: 'rgba(0,0,0,0.05)', border: `1px solid ${alpha('#10B981', 0.25)}` }
                                             }}>
                                             <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
-                                                <Box sx={{ width: 32, height: 32, borderRadius: '8px', flexShrink: 0, background: isActive ? 'linear-gradient(135deg,#10B981,#6366F1)' : 'rgba(99,102,241,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                    <FlightIcon sx={{ color: isActive ? 'white' : '#818CF8', fontSize: 15 }} />
+                                                <Box sx={{ width: 32, height: 32, borderRadius: '8px', flexShrink: 0, background: isActive ? 'linear-gradient(135deg,#10B981,#6366F1)' : 'rgba(99,102,241,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                    <FlightIcon sx={{ color: isActive ? 'white' : '#6366F1', fontSize: 15 }} />
                                                 </Box>
                                                 <Box sx={{ flex: 1, minWidth: 0 }}>
-                                                    <Typography variant="body2" sx={{ fontWeight: 700, color: isActive ? '#10B981' : 'white', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: '0.83rem' }}>
+                                                    <Typography variant="body2" sx={{ fontWeight: 700, color: isActive ? '#10B981' : '#1a1a1a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: '0.83rem' }}>
                                                         {m.mission_name}
                                                     </Typography>
                                                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.2 }}>
@@ -584,15 +584,15 @@ const MissionViewer = () => {
                                                         </Typography>
                                                     </Box>
                                                     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mt: 0.4 }}>
-                                                        <Chip label={`${wpCount} WPs`} size="small" sx={{ height: 16, fontSize: '0.6rem', bgcolor: alpha('#6366F1', 0.18), color: '#818CF8', border: `1px solid ${alpha('#6366F1', 0.3)}`, '& .MuiChip-label': { px: 0.6 } }} />
+                                                        <Chip label={`${wpCount} WPs`} size="small" sx={{ height: 16, fontSize: '0.6rem', bgcolor: alpha('#6366F1', 0.1), color: '#6366F1', border: `1px solid ${alpha('#6366F1', 0.2)}`, '& .MuiChip-label': { px: 0.6 } }} />
                                                         <Box sx={{ display: 'flex', gap: 0.2 }}>
                                                             <Tooltip title="Export .plan">
-                                                                <IconButton size="small" onClick={e => exportPlan(m, e)} sx={{ p: 0.3, color: '#10B981', '&:hover': { bgcolor: alpha('#10B981', 0.1) } }}>
+                                                                <IconButton size="small" onClick={e => exportPlan(m, e)} sx={{ p: 0.3, color: '#10B981', '&:hover': { bgcolor: alpha('#10B981', 0.08) } }}>
                                                                     <DownloadIcon sx={{ fontSize: 13 }} />
                                                                 </IconButton>
                                                             </Tooltip>
                                                             <Tooltip title="Delete">
-                                                                <IconButton size="small" onClick={e => deleteMission(m._id, e)} disabled={deletingId === m._id} sx={{ p: 0.3, color: '#EF4444', '&:hover': { bgcolor: alpha('#EF4444', 0.1) } }}>
+                                                                <IconButton size="small" onClick={e => deleteMission(m._id, e)} disabled={deletingId === m._id} sx={{ p: 0.3, color: '#EF4444', '&:hover': { bgcolor: alpha('#EF4444', 0.08) } }}>
                                                                     {deletingId === m._id ? <CircularProgress size={10} sx={{ color: '#EF4444' }} /> : <DeleteIcon sx={{ fontSize: 13 }} />}
                                                                 </IconButton>
                                                             </Tooltip>
@@ -613,10 +613,10 @@ const MissionViewer = () => {
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 1, minWidth: 0 }}>
                 {selectedMission ? (
                     <>
-                        <Paper sx={{ px: 2, py: 1.2, borderRadius: 2.5, border: `1px solid ${borderColor}`, background: panelBg }}>
+                        <Paper sx={{ px: 2, py: 1.2, borderRadius: 2.5, border: `1px solid ${borderColor}`, background: panelBg, boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
                                 <Box sx={{ flex: 1, minWidth: 0 }}>
-                                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: 'white', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                    <Typography variant="subtitle2" sx={{ fontWeight: 800, color: '#1a1a1a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                                         ✈️ {selectedMission.mission_name}
                                     </Typography>
                                     <Typography variant="caption" sx={{ color: 'text.secondary' }}>
@@ -629,22 +629,22 @@ const MissionViewer = () => {
                                     <Pill icon={<AltIcon sx={{ fontSize: 14 }} />} label="Max Alt" value={`${maxAlt} m`} color="#F59E0B" />
                                 </Stack>
                                 <Tooltip title="Close Plan">
-                                    <IconButton size="small" onClick={() => setSelectedMission(null)} sx={{ color: 'text.secondary', '&:hover': { color: 'white' } }}>
+                                    <IconButton size="small" onClick={() => setSelectedMission(null)} sx={{ color: 'text.secondary', '&:hover': { color: '#1a1a1a' } }}>
                                         <CloseIcon fontSize="small" />
                                     </IconButton>
                                 </Tooltip>
                             </Box>
                         </Paper>
-                        <Paper sx={{ flex: 1, borderRadius: 2.5, overflow: 'hidden', border: `1px solid ${borderColor}`, position: 'relative' }}>
+                        <Paper sx={{ flex: 1, borderRadius: 2.5, overflow: 'hidden', border: `1px solid ${borderColor}`, position: 'relative', boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
                             <MissionMap key={selectedMission._id} mission={selectedMission} />
                         </Paper>
                     </>
                 ) : (
-                    <Paper sx={{ flex: 1, borderRadius: 2.5, border: `1px solid ${borderColor}`, background: panelBg, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2 }}>
-                        <Box sx={{ width: 72, height: 72, borderRadius: '18px', background: `linear-gradient(135deg,${alpha('#10B981', 0.18)},${alpha('#6366F1', 0.18)})`, border: `2px solid ${alpha('#10B981', 0.3)}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Paper sx={{ flex: 1, borderRadius: 2.5, border: `1px solid ${borderColor}`, background: panelBg, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2, boxShadow: '0 1px 3px rgba(0,0,0,0.06)' }}>
+                        <Box sx={{ width: 72, height: 72, borderRadius: '18px', background: `linear-gradient(135deg,${alpha('#10B981', 0.1)},${alpha('#6366F1', 0.1)})`, border: `2px solid ${alpha('#10B981', 0.2)}`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <MapIcon sx={{ fontSize: 36, color: '#10B981' }} />
                         </Box>
-                        <Typography variant="h6" sx={{ color: 'white', fontWeight: 700 }}>
+                        <Typography variant="h6" sx={{ color: '#1a1a1a', fontWeight: 700 }}>
                             Select a Mission Plan
                         </Typography>
                         <Typography variant="body2" sx={{ color: 'text.secondary', textAlign: 'center', maxWidth: 300 }}>

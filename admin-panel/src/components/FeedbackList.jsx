@@ -92,11 +92,27 @@ const FeedbackList = () => {
                 <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }} onClose={() => setError(null)}>{error}</Alert>
             )}
 
-            <Paper className="glass-card" sx={{ overflow: 'hidden', borderRadius: 4 }}>
+            <Paper sx={{ 
+                overflow: 'hidden', 
+                borderRadius: 4,
+                boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+                border: '1px solid rgba(0,0,0,0.06)',
+                bgcolor: '#ffffff'
+            }}>
                 {/* Header */}
-                <Box sx={{ p: 3, display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <Box sx={{ 
+                    p: 3, 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 2, 
+                    flexWrap: 'wrap', 
+                    borderBottom: '1px solid rgba(0,0,0,0.06)',
+                    bgcolor: '#fafafa'
+                }}>
                     <Box sx={{ flex: 1 }}>
-                        <Typography variant="h6" sx={{ fontWeight: 800, color: 'white', letterSpacing: '-0.02em' }}>User Feedback</Typography>
+                        <Typography variant="h6" sx={{ fontWeight: 800, color: '#1a1a1a', letterSpacing: '-0.02em' }}>
+                            User Feedback
+                        </Typography>
                         <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
                             {filtered.length} submissions
                         </Typography>
@@ -112,20 +128,31 @@ const FeedbackList = () => {
                         sx={{
                             width: 240,
                             '& .MuiOutlinedInput-root': {
-                                borderRadius: 2, bgcolor: 'rgba(255,255,255,0.04)',
-                                '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' },
-                                '&:hover fieldset': { borderColor: 'rgba(16,185,129,0.5)' },
+                                borderRadius: 2, 
+                                bgcolor: '#ffffff',
+                                '& fieldset': { borderColor: 'rgba(0,0,0,0.12)' },
+                                '&:hover fieldset': { borderColor: '#10B981' },
                                 '&.Mui-focused fieldset': { borderColor: '#10B981' },
                             },
                         }}
                     />
                     <Tooltip title="Export CSV">
-                        <IconButton onClick={exportCSV} size="small" sx={{ bgcolor: 'rgba(245,158,11,0.1)', color: '#F59E0B', '&:hover': { bgcolor: 'rgba(245,158,11,0.2)' }, borderRadius: 2 }}>
+                        <IconButton onClick={exportCSV} size="small" sx={{ 
+                            bgcolor: 'rgba(245,158,11,0.08)', 
+                            color: '#D97706', 
+                            '&:hover': { bgcolor: 'rgba(245,158,11,0.15)' }, 
+                            borderRadius: 2 
+                        }}>
                             <DownloadIcon fontSize="small" />
                         </IconButton>
                     </Tooltip>
                     <Tooltip title="Refresh">
-                        <IconButton onClick={fetchFeedback} size="small" sx={{ bgcolor: 'rgba(16,185,129,0.12)', color: '#10B981', '&:hover': { bgcolor: 'rgba(16,185,129,0.2)' }, borderRadius: 2 }}>
+                        <IconButton onClick={fetchFeedback} size="small" sx={{ 
+                            bgcolor: 'rgba(16,185,129,0.08)', 
+                            color: '#10B981', 
+                            '&:hover': { bgcolor: 'rgba(16,185,129,0.15)' }, 
+                            borderRadius: 2 
+                        }}>
                             <RefreshIcon fontSize="small" />
                         </IconButton>
                     </Tooltip>
@@ -135,7 +162,7 @@ const FeedbackList = () => {
                 <Box sx={{ p: 3 }}>
                     {loading ? (
                         [...Array(4)].map((_, i) => (
-                            <Skeleton key={i} variant="rectangular" height={100} sx={{ mb: 2, borderRadius: 2, bgcolor: 'rgba(255,255,255,0.04)' }} />
+                            <Skeleton key={i} variant="rectangular" height={100} sx={{ mb: 2, borderRadius: 2, bgcolor: 'rgba(0,0,0,0.04)' }} />
                         ))
                     ) : paged.length === 0 ? (
                         <Box sx={{ textAlign: 'center', py: 8 }}>
@@ -155,24 +182,27 @@ const FeedbackList = () => {
                                         p: 2.5,
                                         borderRadius: 2,
                                         mb: 1.5,
-                                        background: `linear-gradient(135deg, ${alpha(color, 0.06)}, ${alpha(color, 0.02)})`,
-                                        border: `1px solid ${alpha(color, 0.12)}`,
+                                        background: `linear-gradient(135deg, ${alpha(color, 0.04)}, ${alpha(color, 0.01)})`,
+                                        border: `1px solid ${alpha(color, 0.08)}`,
                                         transition: 'all 0.2s',
                                         '&:hover': {
-                                            background: `linear-gradient(135deg, ${alpha(color, 0.1)}, ${alpha(color, 0.04)})`,
-                                            border: `1px solid ${alpha(color, 0.2)}`,
+                                            background: `linear-gradient(135deg, ${alpha(color, 0.08)}, ${alpha(color, 0.02)})`,
+                                            border: `1px solid ${alpha(color, 0.15)}`,
                                         },
                                     }}
                                 >
                                     <Avatar sx={{
                                         width: 42, height: 42, fontWeight: 700, fontSize: '1rem',
-                                        bgcolor: color, borderRadius: '12px', flexShrink: 0,
+                                        bgcolor: color, 
+                                        color: '#ffffff',
+                                        borderRadius: '12px', 
+                                        flexShrink: 0,
                                     }}>
                                         {name[0].toUpperCase()}
                                     </Avatar>
                                     <Box sx={{ flex: 1, minWidth: 0 }}>
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', mb: 0.5 }}>
-                                            <Typography variant="subtitle2" sx={{ fontWeight: 700, color: 'white' }}>
+                                            <Typography variant="subtitle2" sx={{ fontWeight: 700, color: '#1a1a1a' }}>
                                                 {name}
                                             </Typography>
                                             {fb.email && (
@@ -181,7 +211,7 @@ const FeedbackList = () => {
                                                     label={fb.email}
                                                     size="small"
                                                     sx={{
-                                                        bgcolor: 'rgba(255,255,255,0.05)',
+                                                        bgcolor: 'rgba(0,0,0,0.04)',
                                                         color: 'text.secondary',
                                                         fontSize: '0.68rem',
                                                         height: 20,
@@ -195,7 +225,7 @@ const FeedbackList = () => {
                                                     label={fb.mobile_number}
                                                     size="small"
                                                     sx={{
-                                                        bgcolor: 'rgba(255,255,255,0.05)',
+                                                        bgcolor: 'rgba(0,0,0,0.04)',
                                                         color: 'text.secondary',
                                                         fontSize: '0.68rem',
                                                         height: 20,
@@ -223,8 +253,15 @@ const FeedbackList = () => {
                                 page={page}
                                 onChange={(_, p) => setPage(p)}
                                 sx={{
-                                    '& .MuiPaginationItem-root': { color: 'text.secondary', borderColor: 'rgba(255,255,255,0.1)' },
-                                    '& .Mui-selected': { bgcolor: alpha('#10B981', 0.2), color: '#10B981', borderColor: alpha('#10B981', 0.4) },
+                                    '& .MuiPaginationItem-root': { 
+                                        color: 'text.secondary', 
+                                        borderColor: 'rgba(0,0,0,0.12)' 
+                                    },
+                                    '& .Mui-selected': { 
+                                        bgcolor: alpha('#10B981', 0.08), 
+                                        color: '#10B981', 
+                                        borderColor: alpha('#10B981', 0.3) 
+                                    },
                                 }}
                                 variant="outlined"
                                 shape="rounded"
