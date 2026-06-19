@@ -21,8 +21,9 @@ import toast from 'react-hot-toast';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
+// White theme cell styles
 const cellSx = {
-    borderBottom: '1px solid rgba(255,255,255,0.04)',
+    borderBottom: '1px solid rgba(0,0,0,0.08)',
     color: 'text.primary',
     py: 1.5,
 };
@@ -34,7 +35,7 @@ const headCellSx = {
     fontSize: '0.72rem',
     textTransform: 'uppercase',
     letterSpacing: '0.08em',
-    background: 'rgba(255,255,255,0.03)',
+    background: '#f8f9fa',
 };
 
 const UsersTable = () => {
@@ -48,8 +49,32 @@ const UsersTable = () => {
     const [userToDelete, setUserToDelete] = useState(null);
     const [deleting, setDeleting] = useState(false);
     const [detailUser, setDetailUser] = useState(null);
+    const [userMissions, setUserMissions] = useState([]);
+    const [loadingMissions, setLoadingMissions] = useState(false);
+    const [selectedPlan, setSelectedPlan] = useState(null);
 
     useEffect(() => { fetchUsers(); }, []);
+
+    useEffect(() => {
+        if (detailUser) {
+            fetchUserMissions(detailUser.username);
+        } else {
+            setUserMissions([]);
+        }
+    }, [detailUser]);
+
+    const fetchUserMissions = async (username) => {
+        try {
+            setLoadingMissions(true);
+            const res = await axios.get(`${API_URL}/missions?username=${username}`);
+            setUserMissions(res.data);
+        } catch (err) {
+            toast.error('Failed to fetch user log files.');
+            console.error(err);
+        } finally {
+            setLoadingMissions(false);
+        }
+    };
 
     const fetchUsers = async () => {
         try {
@@ -120,11 +145,26 @@ const UsersTable = () => {
                 <Alert severity="error" sx={{ mb: 2, borderRadius: 2 }} onClose={() => setError(null)}>{error}</Alert>
             )}
 
-            <Paper className="glass-card" sx={{ p: 0, overflow: 'hidden', borderRadius: 4 }}>
+            <Paper sx={{
+                p: 0,
+                overflow: 'hidden',
+                borderRadius: 4,
+                boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+                border: '1px solid rgba(0,0,0,0.06)',
+                bgcolor: '#ffffff'
+            }}>
                 {/* Header */}
-                <Box sx={{ p: 3, display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                <Box sx={{
+                    p: 3,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 2,
+                    flexWrap: 'wrap',
+                    borderBottom: '1px solid rgba(0,0,0,0.06)',
+                    bgcolor: '#fafafa'
+                }}>
                     <Box sx={{ flex: 1 }}>
-                        <Typography variant="h6" sx={{ fontWeight: 800, color: 'white', letterSpacing: '-0.02em' }}>
+                        <Typography variant="h6" sx={{ fontWeight: 800, color: '#1a1a1a', letterSpacing: '-0.02em' }}>
                             Registered Users
                         </Typography>
                         <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
@@ -144,21 +184,31 @@ const UsersTable = () => {
                             width: 240,
                             '& .MuiOutlinedInput-root': {
                                 borderRadius: 2,
-                                bgcolor: 'rgba(255,255,255,0.04)',
-                                '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' },
-                                '&:hover fieldset': { borderColor: 'rgba(16,185,129,0.5)' },
+                                bgcolor: '#ffffff',
+                                '& fieldset': { borderColor: 'rgba(0,0,0,0.12)' },
+                                '&:hover fieldset': { borderColor: '#10B981' },
                                 '&.Mui-focused fieldset': { borderColor: '#10B981' },
                             },
                         }}
                     />
 
                     <Tooltip title="Export CSV">
-                        <IconButton onClick={exportCSV} size="small" sx={{ bgcolor: 'rgba(16,185,129,0.1)', color: '#10B981', '&:hover': { bgcolor: 'rgba(16,185,129,0.2)' }, borderRadius: 2 }}>
+                        <IconButton onClick={exportCSV} size="small" sx={{
+                            bgcolor: 'rgba(16,185,129,0.08)',
+                            color: '#10B981',
+                            '&:hover': { bgcolor: 'rgba(16,185,129,0.15)' },
+                            borderRadius: 2
+                        }}>
                             <DownloadIcon fontSize="small" />
                         </IconButton>
                     </Tooltip>
                     <Tooltip title="Refresh">
-                        <IconButton onClick={fetchUsers} size="small" sx={{ bgcolor: 'rgba(99,102,241,0.1)', color: '#818CF8', '&:hover': { bgcolor: 'rgba(99,102,241,0.2)' }, borderRadius: 2 }}>
+                        <IconButton onClick={fetchUsers} size="small" sx={{
+                            bgcolor: 'rgba(99,102,241,0.08)',
+                            color: '#6366F1',
+                            '&:hover': { bgcolor: 'rgba(99,102,241,0.15)' },
+                            borderRadius: 2
+                        }}>
                             <RefreshIcon fontSize="small" />
                         </IconButton>
                     </Tooltip>
@@ -180,7 +230,7 @@ const UsersTable = () => {
                                     <TableRow key={i}>
                                         {[...Array(6)].map((_, j) => (
                                             <TableCell key={j} sx={cellSx}>
-                                                <Skeleton variant="text" sx={{ bgcolor: 'rgba(255,255,255,0.04)' }} />
+                                                <Skeleton variant="text" sx={{ bgcolor: 'rgba(0,0,0,0.04)' }} />
                                             </TableCell>
                                         ))}
                                     </TableRow>
@@ -191,7 +241,7 @@ const UsersTable = () => {
                                         hover
                                         sx={{
                                             cursor: 'pointer',
-                                            '&:hover': { bgcolor: 'rgba(16,185,129,0.06) !important' },
+                                            '&:hover': { bgcolor: 'rgba(16,185,129,0.04) !important' },
                                             transition: 'background 0.15s',
                                         }}
                                     >
@@ -200,12 +250,13 @@ const UsersTable = () => {
                                                 <Avatar sx={{
                                                     width: 32, height: 32, fontSize: '0.8rem', fontWeight: 700,
                                                     bgcolor: getAvatarColor(user.username),
+                                                    color: '#ffffff',
                                                     borderRadius: '8px',
                                                 }}>
                                                     {(user.displayname || user.username || '?')[0].toUpperCase()}
                                                 </Avatar>
                                                 <Box>
-                                                    <Typography variant="body2" sx={{ fontWeight: 600, color: 'white', lineHeight: 1.3 }}>
+                                                    <Typography variant="body2" sx={{ fontWeight: 600, color: '#1a1a1a', lineHeight: 1.3 }}>
                                                         {user.displayname}
                                                     </Typography>
                                                     <Typography variant="caption" sx={{ color: 'text.secondary' }}>
@@ -215,7 +266,7 @@ const UsersTable = () => {
                                             </Box>
                                         </TableCell>
                                         <TableCell sx={cellSx}>
-                                            <Typography variant="body2" sx={{ color: '#06B6D4' }}>{user.email}</Typography>
+                                            <Typography variant="body2" sx={{ color: '#0D9488' }}>{user.email}</Typography>
                                         </TableCell>
                                         <TableCell sx={cellSx}>
                                             <Typography variant="body2" sx={{ color: 'text.secondary' }}>{user.mobile_number || '—'}</Typography>
@@ -225,10 +276,11 @@ const UsersTable = () => {
                                                 label={user.rpc_completed ?? 0}
                                                 size="small"
                                                 sx={{
-                                                    bgcolor: alpha('#6366F1', 0.15),
-                                                    color: '#818CF8',
-                                                    border: `1px solid ${alpha('#6366F1', 0.3)}`,
-                                                    fontWeight: 800, fontSize: '0.72rem',
+                                                    bgcolor: alpha('#6366F1', 0.08),
+                                                    color: '#6366F1',
+                                                    border: `1px solid ${alpha('#6366F1', 0.2)}`,
+                                                    fontWeight: 800,
+                                                    fontSize: '0.72rem',
                                                 }}
                                             />
                                         </TableCell>
@@ -243,7 +295,10 @@ const UsersTable = () => {
                                                     <IconButton
                                                         size="small"
                                                         onClick={() => setDetailUser(user)}
-                                                        sx={{ color: '#10B981', '&:hover': { bgcolor: alpha('#10B981', 0.1) } }}
+                                                        sx={{
+                                                            color: '#10B981',
+                                                            '&:hover': { bgcolor: alpha('#10B981', 0.08) }
+                                                        }}
                                                     >
                                                         <PersonIcon fontSize="small" />
                                                     </IconButton>
@@ -252,7 +307,10 @@ const UsersTable = () => {
                                                     <IconButton
                                                         size="small"
                                                         onClick={() => { setUserToDelete(user); setDeleteDialogOpen(true); }}
-                                                        sx={{ color: '#EF4444', '&:hover': { bgcolor: alpha('#EF4444', 0.1) } }}
+                                                        sx={{
+                                                            color: '#EF4444',
+                                                            '&:hover': { bgcolor: alpha('#EF4444', 0.08) }
+                                                        }}
                                                     >
                                                         <DeleteIcon fontSize="small" />
                                                     </IconButton>
@@ -280,7 +338,11 @@ const UsersTable = () => {
                     page={page}
                     onPageChange={(_, p) => setPage(p)}
                     onRowsPerPageChange={e => { setRowsPerPage(+e.target.value); setPage(0); }}
-                    sx={{ borderTop: '1px solid rgba(255,255,255,0.06)', color: 'text.secondary' }}
+                    sx={{
+                        borderTop: '1px solid rgba(0,0,0,0.06)',
+                        color: 'text.secondary',
+                        bgcolor: '#fafafa'
+                    }}
                 />
             </Paper>
 
@@ -289,16 +351,22 @@ const UsersTable = () => {
                 open={deleteDialogOpen}
                 onClose={() => setDeleteDialogOpen(false)}
                 PaperProps={{
-                    sx: { background: '#0F0F1A', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 4, minWidth: 360 }
+                    sx: {
+                        background: '#ffffff',
+                        border: '1px solid rgba(0,0,0,0.08)',
+                        borderRadius: 4,
+                        minWidth: 360,
+                        boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
+                    }
                 }}
             >
-                <DialogTitle sx={{ color: 'white', fontWeight: 700, pb: 1 }}>
+                <DialogTitle sx={{ color: '#1a1a1a', fontWeight: 700, pb: 1 }}>
                     Delete User?
                 </DialogTitle>
                 <DialogContent>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }}>
                         Are you sure you want to delete{' '}
-                        <strong style={{ color: 'white' }}>{userToDelete?.displayname || userToDelete?.username}</strong>?
+                        <strong style={{ color: '#1a1a1a' }}>{userToDelete?.displayname || userToDelete?.username}</strong>?
                         This action cannot be undone.
                     </Typography>
                 </DialogContent>
@@ -325,7 +393,13 @@ const UsersTable = () => {
                 open={!!detailUser}
                 onClose={() => setDetailUser(null)}
                 PaperProps={{
-                    sx: { background: '#0F0F1A', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 4, minWidth: 420 }
+                    sx: {
+                        background: '#ffffff',
+                        border: '1px solid rgba(0,0,0,0.08)',
+                        borderRadius: 4,
+                        minWidth: 420,
+                        boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
+                    }
                 }}
             >
                 {detailUser && (
@@ -333,12 +407,14 @@ const UsersTable = () => {
                         <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 2, pb: 1 }}>
                             <Avatar sx={{
                                 width: 44, height: 44, fontWeight: 700, fontSize: '1.1rem',
-                                bgcolor: getAvatarColor(detailUser.username), borderRadius: '12px',
+                                bgcolor: getAvatarColor(detailUser.username),
+                                color: '#ffffff',
+                                borderRadius: '12px',
                             }}>
                                 {(detailUser.displayname || detailUser.username || '?')[0].toUpperCase()}
                             </Avatar>
                             <Box sx={{ flex: 1 }}>
-                                <Typography variant="h6" sx={{ color: 'white', fontWeight: 700, lineHeight: 1.2 }}>
+                                <Typography variant="h6" sx={{ color: '#1a1a1a', fontWeight: 700, lineHeight: 1.2 }}>
                                     {detailUser.displayname}
                                 </Typography>
                                 <Typography variant="caption" sx={{ color: 'text.secondary' }}>
@@ -349,7 +425,7 @@ const UsersTable = () => {
                                 <CloseIcon fontSize="small" />
                             </IconButton>
                         </DialogTitle>
-                        <Divider sx={{ borderColor: 'rgba(255,255,255,0.08)' }} />
+                        <Divider sx={{ borderColor: 'rgba(0,0,0,0.06)' }} />
                         <DialogContent sx={{ pt: 2 }}>
                             {[
                                 { label: 'Email', value: detailUser.email },
@@ -358,13 +434,110 @@ const UsersTable = () => {
                                 { label: 'Joined', value: new Date(detailUser.created_at).toLocaleString() },
                                 { label: 'User ID', value: detailUser._id },
                             ].map(({ label, value }) => (
-                                <Box key={label} sx={{ display: 'flex', justifyContent: 'space-between', py: 1.2, borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                                <Box key={label} sx={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    py: 1.2,
+                                    borderBottom: '1px solid rgba(0,0,0,0.05)'
+                                }}>
                                     <Typography variant="body2" sx={{ color: 'text.secondary', fontWeight: 500 }}>{label}</Typography>
-                                    <Typography variant="body2" sx={{ color: 'white', fontWeight: 600, maxWidth: '60%', textAlign: 'right', wordBreak: 'break-all' }}>
+                                    <Typography variant="body2" sx={{
+                                        color: '#1a1a1a',
+                                        fontWeight: 600,
+                                        maxWidth: '60%',
+                                        textAlign: 'right',
+                                        wordBreak: 'break-all'
+                                    }}>
                                         {value}
                                     </Typography>
                                 </Box>
                             ))}
+
+                            <Typography variant="subtitle2" sx={{ mt: 3, mb: 1, color: '#1a1a1a', fontWeight: 600 }}>
+                                Log Files / Missions
+                            </Typography>
+                            {loadingMissions ? (
+                                <Typography variant="body2" sx={{ color: 'text.secondary' }}>Loading...</Typography>
+                            ) : userMissions.length === 0 ? (
+                                <Typography variant="body2" sx={{ color: 'text.secondary' }}>No log files found.</Typography>
+                            ) : (
+                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                                    {userMissions.map(m => (
+                                        <Box
+                                            key={m._id}
+                                            onClick={() => setSelectedPlan(m)}
+                                            sx={{
+                                                p: 1.5,
+                                                bgcolor: 'rgba(0,0,0,0.02)',
+                                                borderRadius: 2,
+                                                border: '1px solid rgba(0,0,0,0.06)',
+                                                cursor: 'pointer',
+                                                '&:hover': {
+                                                    bgcolor: 'rgba(16,185,129,0.04)',
+                                                    borderColor: 'rgba(16,185,129,0.3)'
+                                                }
+                                            }}
+                                        >
+                                            <Typography variant="body2" sx={{ color: '#1a1a1a', fontWeight: 600 }}>{m.mission_name}</Typography>
+                                            <Typography variant="caption" sx={{ color: 'text.secondary' }}>{new Date(m.date).toLocaleString()}</Typography>
+                                        </Box>
+                                    ))}
+                                </Box>
+                            )}
+                        </DialogContent>
+                    </>
+                )}
+            </Dialog>
+
+            {/* Plan Data Dialog */}
+            <Dialog
+                open={!!selectedPlan}
+                onClose={() => setSelectedPlan(null)}
+                maxWidth="md"
+                fullWidth
+                PaperProps={{
+                    sx: {
+                        background: '#ffffff',
+                        border: '1px solid rgba(0,0,0,0.08)',
+                        borderRadius: 4,
+                        boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
+                    }
+                }}
+            >
+                {selectedPlan && (
+                    <>
+                        <DialogTitle sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            color: '#1a1a1a',
+                            fontWeight: 700,
+                            pb: 1
+                        }}>
+                            Log File: {selectedPlan.mission_name}
+                            <IconButton onClick={() => setSelectedPlan(null)} size="small" sx={{ color: 'text.secondary' }}>
+                                <CloseIcon fontSize="small" />
+                            </IconButton>
+                        </DialogTitle>
+                        <Divider sx={{ borderColor: 'rgba(0,0,0,0.06)' }} />
+                        <DialogContent sx={{ pt: 2 }}>
+                            <Box sx={{
+                                bgcolor: '#f8f9fa',
+                                p: 2,
+                                borderRadius: 2,
+                                overflowX: 'auto',
+                                maxHeight: '500px',
+                                border: '1px solid rgba(0,0,0,0.06)'
+                            }}>
+                                <pre style={{
+                                    margin: 0,
+                                    color: '#1a1a1a',
+                                    fontSize: '0.85rem',
+                                    fontFamily: 'monospace'
+                                }}>
+                                    {JSON.stringify(selectedPlan.plan_data, null, 2)}
+                                </pre>
+                            </Box>
                         </DialogContent>
                     </>
                 )}

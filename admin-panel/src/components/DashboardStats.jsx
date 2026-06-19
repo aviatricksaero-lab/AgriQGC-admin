@@ -8,15 +8,8 @@ import {
     Paper,
     Skeleton,
     Alert,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Chip,
-    alpha,
     Divider,
+    Chip,
     CircularProgress
 } from '@mui/material';
 import {
@@ -25,13 +18,10 @@ import {
     Comment as FeedbackIcon,
     Map as MapIcon,
     TrendingUp as TrendingUpIcon,
-    Timeline as TimelineIcon
 } from '@mui/icons-material';
 import {
     AreaChart,
     Area,
-    BarChart,
-    Bar,
     XAxis,
     YAxis,
     CartesianGrid,
@@ -46,83 +36,157 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-const StatCard = ({ title, value, icon, color, subtitle, loading }) => (
-    <Card sx={{
+// ─── Palette ────────────────────────────────────────────────────────────────
+const PALETTE = {
+    emerald: { main: '#059669', light: '#D1FAE5', text: '#065F46' },
+    indigo: { main: '#4F46E5', light: '#EEF2FF', text: '#3730A3' },
+    amber: { main: '#D97706', light: '#FEF3C7', text: '#92400E' },
+    rose: { main: '#E11D48', light: '#FFE4E6', text: '#9F1239' },
+};
+
+const PIE_COLORS = ['#059669', '#4F46E5', '#D97706', '#E11D48', '#7C3AED'];
+const ZONE_COLORS = { red: '#E11D48', yellow: '#D97706', green: '#059669', blue: '#4F46E5' };
+
+// ─── Stat Card ───────────────────────────────────────────────────────────────
+const StatCard = ({ title, value, icon, palette, subtitle, loading }) => (
+    <Card elevation={0} sx={{
         height: '100%',
-        background: `linear-gradient(135deg, ${alpha(color, 0.12)} 0%, ${alpha(color, 0.04)} 100%)`,
-        border: `1px solid ${alpha(color, 0.2)}`,
+        borderRadius: '20px',
+        border: `1.5px solid ${palette.light}`,
+        background: '#FFFFFF',
         position: 'relative',
         overflow: 'hidden',
         transition: 'transform 0.2s, box-shadow 0.2s',
         '&:hover': {
-            transform: 'translateY(-3px)',
-            boxShadow: `0 12px 35px ${alpha(color, 0.2)}`,
-        }
+            transform: 'translateY(-4px)',
+            boxShadow: `0 16px 40px ${palette.main}22`,
+        },
     }}>
-        {/* Glow orb */}
+        {/* Decorative corner blot */}
         <Box sx={{
             position: 'absolute',
-            top: -30, right: -30,
-            width: 100, height: 100,
+            top: -24, right: -24,
+            width: 88, height: 88,
             borderRadius: '50%',
-            background: `radial-gradient(circle, ${alpha(color, 0.25)}, transparent 70%)`,
+            background: palette.light,
             pointerEvents: 'none',
         }} />
+
         <CardContent sx={{ p: 3 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                 <Box sx={{ flex: 1 }}>
-                    <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', fontSize: '0.7rem' }}>
+                    <Typography variant="caption" sx={{
+                        color: '#94A3B8',
+                        fontWeight: 700,
+                        letterSpacing: '0.09em',
+                        textTransform: 'uppercase',
+                        fontSize: '0.68rem',
+                    }}>
                         {title}
                     </Typography>
+
                     {loading ? (
-                        <Skeleton variant="text" width={80} height={50} sx={{ bgcolor: alpha(color, 0.1) }} />
+                        <Skeleton variant="text" width={72} height={52} />
                     ) : (
-                        <Typography variant="h3" sx={{ fontWeight: 800, color: 'white', lineHeight: 1.1, mt: 0.5 }}>
+                        <Typography variant="h3" sx={{
+                            fontWeight: 800,
+                            color: '#0F172A',
+                            lineHeight: 1.1,
+                            mt: 0.5,
+                            fontSize: { xs: '2rem', sm: '2.4rem' },
+                        }}>
                             {value}
                         </Typography>
                     )}
+
                     {subtitle && (
-                        <Typography variant="caption" sx={{ color: alpha(color, 0.8), fontWeight: 500, mt: 0.5, display: 'block' }}>
+                        <Typography variant="caption" sx={{
+                            color: palette.text,
+                            fontWeight: 600,
+                            mt: 0.5,
+                            display: 'block',
+                            fontSize: '0.72rem',
+                        }}>
                             {subtitle}
                         </Typography>
                     )}
                 </Box>
+
                 <Box sx={{
-                    width: 52, height: 52,
+                    width: 50, height: 50,
                     borderRadius: '14px',
-                    background: `linear-gradient(135deg, ${color}, ${alpha(color, 0.7)})`,
+                    background: palette.light,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    boxShadow: `0 6px 20px ${alpha(color, 0.4)}`,
                     flexShrink: 0,
                 }}>
-                    {React.cloneElement(icon, { sx: { color: 'white', fontSize: 26 } })}
+                    {React.cloneElement(icon, { sx: { color: palette.main, fontSize: 24 } })}
                 </Box>
+            </Box>
+
+            {/* Bottom accent bar */}
+            <Box sx={{
+                mt: 2.5,
+                height: 4,
+                borderRadius: 99,
+                background: palette.light,
+                position: 'relative',
+                overflow: 'hidden',
+            }}>
+                <Box sx={{
+                    position: 'absolute',
+                    left: 0, top: 0, bottom: 0,
+                    width: '60%',
+                    borderRadius: 99,
+                    background: `linear-gradient(90deg, ${palette.main}, ${palette.main}88)`,
+                }} />
             </Box>
         </CardContent>
     </Card>
 );
 
-const ZONE_COLORS = { red: '#EF4444', yellow: '#F59E0B', green: '#10B981', blue: '#3B82F6' };
-const PIE_COLORS = ['#10B981', '#6366F1', '#F59E0B', '#EC4899', '#EF4444'];
-
+// ─── Tooltip ─────────────────────────────────────────────────────────────────
 const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-        return (
-            <Paper className="glass-card" sx={{ p: 1.5, border: '1px solid rgba(255,255,255,0.1)' }}>
-                <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', mb: 0.5 }}>{label}</Typography>
-                {payload.map(p => (
-                    <Typography key={p.dataKey} variant="caption" sx={{ color: p.color, display: 'block', fontWeight: 700 }}>
-                        {p.name}: {p.value}
-                    </Typography>
-                ))}
-            </Paper>
-        );
-    }
-    return null;
+    if (!active || !payload?.length) return null;
+    return (
+        <Paper elevation={4} sx={{
+            p: 1.5,
+            borderRadius: 3,
+            border: '1px solid #F1F5F9',
+            background: '#FFFFFF',
+            minWidth: 120,
+        }}>
+            <Typography variant="caption" sx={{ color: '#64748B', display: 'block', mb: 0.5, fontWeight: 600 }}>
+                {label}
+            </Typography>
+            {payload.map(p => (
+                <Typography key={p.dataKey} variant="caption" sx={{ color: p.color, display: 'block', fontWeight: 800 }}>
+                    {p.name}: {p.value}
+                </Typography>
+            ))}
+        </Paper>
+    );
 };
 
+// ─── Section Header ───────────────────────────────────────────────────────────
+const SectionHeader = ({ icon, title, color }) => (
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+        <Box sx={{
+            width: 32, height: 32,
+            borderRadius: '10px',
+            background: color + '18',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+            {React.cloneElement(icon, { sx: { color, fontSize: 17 } })}
+        </Box>
+        <Typography variant="subtitle1" sx={{ fontWeight: 800, color: '#0F172A', fontSize: '0.95rem' }}>
+            {title}
+        </Typography>
+    </Box>
+);
+
+// ─── Main Component ───────────────────────────────────────────────────────────
 const DashboardStats = () => {
     const [stats, setStats] = useState({ userCount: 0, sessionCount: 0, feedbackCount: 0, facilityCount: 0 });
     const [chartData, setChartData] = useState([]);
@@ -150,7 +214,7 @@ const DashboardStats = () => {
             const feedback = feedbackRes.data;
             const facilities = facilitiesRes.data?.features || [];
 
-            // Monthly registrations (last 6 months)
+            // Monthly chart data
             const monthMap = {};
             for (let i = 5; i >= 0; i--) {
                 const d = new Date();
@@ -168,20 +232,13 @@ const DashboardStats = () => {
             });
             setChartData(Object.values(monthMap));
 
-            // Zone type distribution
+            // Zone pie data
             const zoneCount = {};
             facilities.forEach(f => {
                 const z = f.properties?.zoneType || 'unknown';
                 zoneCount[z] = (zoneCount[z] || 0) + 1;
             });
             setZoneData(Object.entries(zoneCount).map(([name, value]) => ({ name, value })));
-
-            // Sessions by user (top 7)
-            const sessionsByUser = {};
-            sessions.forEach(s => {
-                sessionsByUser[s.username] = (sessionsByUser[s.username] || 0) + 1;
-            });
-            // (used below in barChartData)
 
             setStats({
                 userCount: users.length,
@@ -191,108 +248,151 @@ const DashboardStats = () => {
             });
             setRecentUsers(users.slice(0, 5));
             setRecentSessions(sessions.slice(0, 5));
-
         } catch (err) {
-            setError('Failed to load dashboard data. Check your API connection.');
+            setError('Failed to load dashboard data. Please check your API connection.');
             console.error(err);
         } finally {
             setLoading(false);
         }
     };
 
+    const cards = [
+        { title: 'Total Users', value: stats.userCount, icon: <UsersIcon />, palette: PALETTE.emerald, subtitle: 'Registered pilots' },
+        { title: 'Flight Sessions', value: stats.sessionCount, icon: <FlightsIcon />, palette: PALETTE.indigo, subtitle: 'Total logged flights' },
+        { title: 'Feedback', value: stats.feedbackCount, icon: <FeedbackIcon />, palette: PALETTE.amber, subtitle: 'User submissions' },
+        { title: 'Airspace Zones', value: stats.facilityCount, icon: <MapIcon />, palette: PALETTE.rose, subtitle: 'Active zones' },
+    ];
+
     return (
-        <Box>
+        <Box sx={{ background: '#F8FAFC', minHeight: '100vh', p: { xs: 2, md: 3 } }}>
             {error && (
-                <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }} onClose={() => setError(null)}>
+                <Alert
+                    severity="error"
+                    sx={{ mb: 3, borderRadius: 3, border: '1px solid #FEE2E2', background: '#FFF5F5' }}
+                    onClose={() => setError(null)}
+                >
                     {error}
                 </Alert>
             )}
 
-            {/* Stat Cards */}
+            {/* ── Stat Cards ── */}
             <Grid container spacing={3} sx={{ mb: 4 }}>
-                {[
-                    { title: 'Total Users', value: stats.userCount, icon: <UsersIcon />, color: '#10B981', subtitle: 'Registered pilots' },
-                    { title: 'Flight Sessions', value: stats.sessionCount, icon: <FlightsIcon />, color: '#6366F1', subtitle: 'Total logged flights' },
-                    { title: 'Feedback', value: stats.feedbackCount, icon: <FeedbackIcon />, color: '#F59E0B', subtitle: 'User submissions' },
-                    { title: 'Airspace Zones', value: stats.facilityCount, icon: <MapIcon />, color: '#EF4444', subtitle: 'Active zones' },
-                ].map((card) => (
+                {cards.map(card => (
                     <Grid item xs={12} sm={6} lg={3} key={card.title}>
                         <StatCard {...card} loading={loading} />
                     </Grid>
                 ))}
             </Grid>
 
-            {/* Charts Row */}
+            {/* ── Charts ── */}
             <Grid container spacing={3} sx={{ mb: 4 }}>
-                {/* Growth Chart */}
+                {/* Growth Area Chart */}
                 <Grid item xs={12} lg={8}>
-                    <Paper className="glass-card" sx={{ p: 3, height: 320, borderRadius: 4 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2.5 }}>
-                            <TrendingUpIcon sx={{ color: '#10B981', fontSize: 20 }} />
-                            <Typography variant="subtitle1" sx={{ fontWeight: 800, color: 'white' }}>
-                                Growth Overview
-                            </Typography>
-                            <Typography variant="caption" sx={{ color: 'text.secondary', ml: 0.5, fontWeight: 500 }}>
-                                (last 6 months)
-                            </Typography>
-                        </Box>
+                    <Paper elevation={0} sx={{
+                        p: 3,
+                        height: 340,
+                        borderRadius: '20px',
+                        border: '1.5px solid #E2E8F0',
+                        background: '#FFFFFF',
+                    }}>
+                        <SectionHeader
+                            icon={<TrendingUpIcon />}
+                            title="Growth Overview"
+                            color={PALETTE.emerald.main}
+                        />
+                        <Typography variant="caption" sx={{ color: '#94A3B8', fontWeight: 500, display: 'block', mb: 2, mt: -1 }}>
+                            Last 6 months
+                        </Typography>
+
                         {loading ? (
                             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 220 }}>
-                                <CircularProgress size={40} sx={{ color: '#10B981' }} />
+                                <CircularProgress size={36} sx={{ color: PALETTE.emerald.main }} />
                             </Box>
                         ) : (
                             <ResponsiveContainer width="100%" height={230}>
-                                <AreaChart data={chartData} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
+                                <AreaChart data={chartData} margin={{ top: 5, right: 16, left: -10, bottom: 5 }}>
                                     <defs>
                                         <linearGradient id="gradUsers" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="#10B981" stopOpacity={0.4} />
-                                            <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
+                                            <stop offset="5%" stopColor="#059669" stopOpacity={0.18} />
+                                            <stop offset="95%" stopColor="#059669" stopOpacity={0} />
                                         </linearGradient>
                                         <linearGradient id="gradSessions" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="#6366F1" stopOpacity={0.4} />
-                                            <stop offset="95%" stopColor="#6366F1" stopOpacity={0} />
+                                            <stop offset="5%" stopColor="#4F46E5" stopOpacity={0.18} />
+                                            <stop offset="95%" stopColor="#4F46E5" stopOpacity={0} />
                                         </linearGradient>
                                     </defs>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                                    <XAxis dataKey="month" tick={{ fill: '#94A3B8', fontSize: 11, fontWeight: 600 }} axisLine={false} tickLine={false} />
-                                    <YAxis tick={{ fill: '#94A3B8', fontSize: 11, fontWeight: 600 }} axisLine={false} tickLine={false} />
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
+                                    <XAxis
+                                        dataKey="month"
+                                        tick={{ fill: '#94A3B8', fontSize: 11, fontWeight: 600 }}
+                                        axisLine={false} tickLine={false}
+                                    />
+                                    <YAxis
+                                        tick={{ fill: '#94A3B8', fontSize: 11, fontWeight: 600 }}
+                                        axisLine={false} tickLine={false}
+                                    />
                                     <Tooltip content={<CustomTooltip />} />
                                     <Legend wrapperStyle={{ paddingTop: 10, fontSize: 12, fontWeight: 600 }} />
-                                    <Area type="monotone" dataKey="users" name="New Users" stroke="#10B981" strokeWidth={3} fill="url(#gradUsers)" dot={{ fill: '#10B981', r: 4, strokeWidth: 2, stroke: '#0F0F1A' }} activeDot={{ r: 6, strokeWidth: 0 }} />
-                                    <Area type="monotone" dataKey="sessions" name="Sessions" stroke="#6366F1" strokeWidth={3} fill="url(#gradSessions)" dot={{ fill: '#6366F1', r: 4, strokeWidth: 2, stroke: '#0F0F1A' }} activeDot={{ r: 6, strokeWidth: 0 }} />
+                                    <Area
+                                        type="monotone" dataKey="users" name="New Users"
+                                        stroke="#059669" strokeWidth={2.5} fill="url(#gradUsers)"
+                                        dot={{ fill: '#059669', r: 4, strokeWidth: 2, stroke: '#FFFFFF' }}
+                                        activeDot={{ r: 6, strokeWidth: 2, stroke: '#FFFFFF' }}
+                                    />
+                                    <Area
+                                        type="monotone" dataKey="sessions" name="Sessions"
+                                        stroke="#4F46E5" strokeWidth={2.5} fill="url(#gradSessions)"
+                                        dot={{ fill: '#4F46E5', r: 4, strokeWidth: 2, stroke: '#FFFFFF' }}
+                                        activeDot={{ r: 6, strokeWidth: 2, stroke: '#FFFFFF' }}
+                                    />
                                 </AreaChart>
                             </ResponsiveContainer>
                         )}
                     </Paper>
                 </Grid>
 
-                {/* Zone Distribution Pie */}
+                {/* Zone Pie */}
                 <Grid item xs={12} lg={4}>
-                    <Paper className="glass-card" sx={{ p: 3, height: 320, borderRadius: 4 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2.5 }}>
-                            <MapIcon sx={{ color: '#EF4444', fontSize: 20 }} />
-                            <Typography variant="subtitle1" sx={{ fontWeight: 800, color: 'white' }}>
-                                Zone Distribution
-                            </Typography>
-                        </Box>
+                    <Paper elevation={0} sx={{
+                        p: 3,
+                        height: 340,
+                        borderRadius: '20px',
+                        border: '1.5px solid #E2E8F0',
+                        background: '#FFFFFF',
+                    }}>
+                        <SectionHeader icon={<MapIcon />} title="Zone Distribution" color={PALETTE.rose.main} />
+
                         {loading ? (
-                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 220 }}>
-                                <CircularProgress size={40} sx={{ color: '#EF4444' }} />
+                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 240 }}>
+                                <CircularProgress size={36} sx={{ color: PALETTE.rose.main }} />
                             </Box>
                         ) : zoneData.length === 0 ? (
-                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 220 }}>
-                                <Typography variant="body2" sx={{ color: 'text.secondary' }}>No airspace data</Typography>
+                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: 240 }}>
+                                <Typography variant="body2" sx={{ color: '#94A3B8' }}>No airspace data</Typography>
                             </Box>
                         ) : (
-                            <ResponsiveContainer width="100%" height={230}>
+                            <ResponsiveContainer width="100%" height={260}>
                                 <PieChart>
-                                    <Pie data={zoneData} cx="50%" cy="50%" innerRadius={60} outerRadius={85} paddingAngle={8} dataKey="value" stroke="none">
-                                        {zoneData.map((entry, index) => (
-                                            <Cell key={index} fill={ZONE_COLORS[entry.name] || PIE_COLORS[index % PIE_COLORS.length]} />
+                                    <Pie
+                                        data={zoneData}
+                                        cx="50%" cy="46%"
+                                        innerRadius={62} outerRadius={90}
+                                        paddingAngle={5}
+                                        dataKey="value"
+                                        stroke="none"
+                                    >
+                                        {zoneData.map((entry, i) => (
+                                            <Cell key={i} fill={ZONE_COLORS[entry.name] || PIE_COLORS[i % PIE_COLORS.length]} />
                                         ))}
                                     </Pie>
                                     <Tooltip content={<CustomTooltip />} />
-                                    <Legend formatter={(v) => <span style={{ color: '#94A3B8', fontSize: 12, fontWeight: 600, textTransform: 'capitalize' }}>{v}</span>} />
+                                    <Legend
+                                        formatter={v => (
+                                            <span style={{ color: '#475569', fontSize: 12, fontWeight: 600, textTransform: 'capitalize' }}>
+                                                {v}
+                                            </span>
+                                        )}
+                                    />
                                 </PieChart>
                             </ResponsiveContainer>
                         )}
@@ -300,111 +400,135 @@ const DashboardStats = () => {
                 </Grid>
             </Grid>
 
-            {/* Recent Activity */}
+            {/* ── Recent Activity ── */}
             <Grid container spacing={3}>
                 {/* Recent Users */}
                 <Grid item xs={12} md={6}>
-                    <Paper className="glass-card" sx={{ p: 3, borderRadius: 4 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                            <UsersIcon sx={{ color: '#10B981', fontSize: 18 }} />
-                            <Typography variant="subtitle1" sx={{ fontWeight: 800, color: 'white' }}>
-                                Recent Registrations
-                            </Typography>
-                        </Box>
-                        <Divider sx={{ mb: 2, borderColor: 'rgba(255,255,255,0.06)' }} />
+                    <Paper elevation={0} sx={{
+                        p: 3,
+                        borderRadius: '20px',
+                        border: '1.5px solid #E2E8F0',
+                        background: '#FFFFFF',
+                    }}>
+                        <SectionHeader icon={<UsersIcon />} title="Recent Registrations" color={PALETTE.emerald.main} />
+                        <Divider sx={{ mb: 2, borderColor: '#F1F5F9' }} />
+
                         {loading ? (
-                            [...Array(4)].map((_, i) => <Skeleton key={i} variant="rectangular" height={40} sx={{ mb: 1, borderRadius: 2, bgcolor: 'rgba(255,255,255,0.04)' }} />)
+                            [...Array(4)].map((_, i) => (
+                                <Skeleton key={i} variant="rectangular" height={48} sx={{ mb: 1, borderRadius: 2 }} />
+                            ))
                         ) : recentUsers.length === 0 ? (
-                            <Typography variant="body2" sx={{ color: 'text.secondary', textAlign: 'center', py: 3 }}>No users yet</Typography>
+                            <Typography variant="body2" sx={{ color: '#94A3B8', textAlign: 'center', py: 4 }}>
+                                No users yet
+                            </Typography>
                         ) : (
-                            <Box>
-                                {recentUsers.map((user) => (
-                                    <Box key={user._id} sx={{
-                                        display: 'flex', alignItems: 'center', gap: 2,
-                                        p: 1.2, borderRadius: 3, mb: 0.5,
-                                        '&:hover': { bgcolor: 'rgba(16,185,129,0.08)' },
-                                        transition: 'background 0.2s',
+                            recentUsers.map(user => (
+                                <Box key={user._id} sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 1.5,
+                                    p: 1.2,
+                                    borderRadius: '12px',
+                                    mb: 0.5,
+                                    cursor: 'default',
+                                    transition: 'background 0.15s',
+                                    '&:hover': { background: '#F0FDF4' },
+                                }}>
+                                    {/* Avatar */}
+                                    <Box sx={{
+                                        width: 38, height: 38,
+                                        borderRadius: '12px',
+                                        background: 'linear-gradient(135deg, #059669, #4F46E5)',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        fontWeight: 800, color: '#FFFFFF',
+                                        fontSize: '0.85rem', flexShrink: 0,
+                                        boxShadow: '0 2px 8px #05966933',
                                     }}>
-                                        <Box sx={{
-                                            width: 34, height: 34, borderRadius: '12px',
-                                            background: 'linear-gradient(135deg, #10B981, #6366F1)',
-                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                            fontWeight: 800, color: 'white', fontSize: '0.8rem', flexShrink: 0,
-                                            boxShadow: '0 4px 10px rgba(16,185,129,0.3)',
-                                        }}>
-                                            {(user.displayname || user.username || 'U')[0].toUpperCase()}
-                                        </Box>
-                                        <Box sx={{ flex: 1, minWidth: 0 }}>
-                                            <Typography variant="body2" sx={{ fontWeight: 700, color: 'white', noWrap: true }}>
-                                                {user.displayname || user.username}
-                                            </Typography>
-                                            <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
-                                                {user.email}
-                                            </Typography>
-                                        </Box>
-                                        <Typography variant="caption" sx={{ color: 'text.secondary', flexShrink: 0, fontWeight: 600 }}>
-                                            {new Date(user.created_at).toLocaleDateString()}
+                                        {(user.displayname || user.username || 'U')[0].toUpperCase()}
+                                    </Box>
+
+                                    <Box sx={{ flex: 1, minWidth: 0 }}>
+                                        <Typography variant="body2" sx={{ fontWeight: 700, color: '#0F172A', lineHeight: 1.2 }} noWrap>
+                                            {user.displayname || user.username}
+                                        </Typography>
+                                        <Typography variant="caption" sx={{ color: '#64748B', fontWeight: 500 }} noWrap>
+                                            {user.email}
                                         </Typography>
                                     </Box>
-                                ))}
-                            </Box>
+
+                                    <Typography variant="caption" sx={{ color: '#94A3B8', flexShrink: 0, fontWeight: 600 }}>
+                                        {new Date(user.created_at).toLocaleDateString()}
+                                    </Typography>
+                                </Box>
+                            ))
                         )}
                     </Paper>
                 </Grid>
 
                 {/* Recent Sessions */}
                 <Grid item xs={12} md={6}>
-                    <Paper className="glass-card" sx={{ p: 3, borderRadius: 4 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                            <FlightsIcon sx={{ color: '#6366F1', fontSize: 18 }} />
-                            <Typography variant="subtitle1" sx={{ fontWeight: 800, color: 'white' }}>
-                                Recent Sessions
-                            </Typography>
-                        </Box>
-                        <Divider sx={{ mb: 2, borderColor: 'rgba(255,255,255,0.06)' }} />
+                    <Paper elevation={0} sx={{
+                        p: 3,
+                        borderRadius: '20px',
+                        border: '1.5px solid #E2E8F0',
+                        background: '#FFFFFF',
+                    }}>
+                        <SectionHeader icon={<FlightsIcon />} title="Recent Sessions" color={PALETTE.indigo.main} />
+                        <Divider sx={{ mb: 2, borderColor: '#F1F5F9' }} />
+
                         {loading ? (
-                            [...Array(4)].map((_, i) => <Skeleton key={i} variant="rectangular" height={40} sx={{ mb: 1, borderRadius: 2, bgcolor: 'rgba(255,255,255,0.04)' }} />)
+                            [...Array(4)].map((_, i) => (
+                                <Skeleton key={i} variant="rectangular" height={48} sx={{ mb: 1, borderRadius: 2 }} />
+                            ))
                         ) : recentSessions.length === 0 ? (
-                            <Typography variant="body2" sx={{ color: 'text.secondary', textAlign: 'center', py: 3 }}>No sessions recorded</Typography>
+                            <Typography variant="body2" sx={{ color: '#94A3B8', textAlign: 'center', py: 4 }}>
+                                No sessions recorded
+                            </Typography>
                         ) : (
-                            <Box>
-                                {recentSessions.map((s) => (
-                                    <Box key={s._id} sx={{
-                                        display: 'flex', alignItems: 'center', gap: 2,
-                                        p: 1.2, borderRadius: 3, mb: 0.5,
-                                        '&:hover': { bgcolor: 'rgba(99,102,241,0.08)' },
-                                        transition: 'background 0.2s',
+                            recentSessions.map(s => (
+                                <Box key={s._id} sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 1.5,
+                                    p: 1.2,
+                                    borderRadius: '12px',
+                                    mb: 0.5,
+                                    transition: 'background 0.15s',
+                                    '&:hover': { background: '#EEF2FF' },
+                                }}>
+                                    <Box sx={{
+                                        width: 38, height: 38,
+                                        borderRadius: '12px',
+                                        background: '#EEF2FF',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        flexShrink: 0,
                                     }}>
-                                        <Box sx={{
-                                            width: 34, height: 34, borderRadius: '12px',
-                                            background: 'linear-gradient(135deg, #6366F1, #10B981)',
-                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                            flexShrink: 0,
-                                            boxShadow: '0 4px 10px rgba(99,102,241,0.3)',
-                                        }}>
-                                            <FlightsIcon sx={{ color: 'white', fontSize: 16 }} />
-                                        </Box>
-                                        <Box sx={{ flex: 1, minWidth: 0 }}>
-                                            <Typography variant="body2" sx={{ fontWeight: 700, color: 'white' }}>
-                                                {s.username}
-                                            </Typography>
-                                            <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 500 }}>
-                                                {s.date} · {s.start_time} → {s.end_time}
-                                            </Typography>
-                                        </Box>
-                                        <Chip
-                                            label={`${Math.round(s.duration || 0)}m`}
-                                            size="small"
-                                            sx={{
-                                                bgcolor: alpha('#6366F1', 0.15),
-                                                color: '#818CF8',
-                                                border: `1px solid ${alpha('#6366F1', 0.3)}`,
-                                                fontWeight: 800, fontSize: '0.7rem',
-                                            }}
-                                        />
+                                        <FlightsIcon sx={{ color: '#4F46E5', fontSize: 18 }} />
                                     </Box>
-                                ))}
-                            </Box>
+
+                                    <Box sx={{ flex: 1, minWidth: 0 }}>
+                                        <Typography variant="body2" sx={{ fontWeight: 700, color: '#0F172A', lineHeight: 1.2 }}>
+                                            {s.username}
+                                        </Typography>
+                                        <Typography variant="caption" sx={{ color: '#64748B', fontWeight: 500 }}>
+                                            {s.date} · {s.start_time} → {s.end_time}
+                                        </Typography>
+                                    </Box>
+
+                                    <Chip
+                                        label={`${Math.round(s.duration || 0)}m`}
+                                        size="small"
+                                        sx={{
+                                            background: '#EEF2FF',
+                                            color: '#4F46E5',
+                                            border: '1px solid #C7D2FE',
+                                            fontWeight: 800,
+                                            fontSize: '0.7rem',
+                                            height: 24,
+                                        }}
+                                    />
+                                </Box>
+                            ))
                         )}
                     </Paper>
                 </Grid>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import DescriptionIcon from '@mui/icons-material/Description';
 import {
     Box,
     Drawer,
@@ -42,6 +43,9 @@ import SessionsTable from './components/SessionsTable';
 import FeedbackList from './components/FeedbackList';
 import DashboardStats from './components/DashboardStats';
 import AirspaceManager from './components/AirspaceManager';
+import Document from './components/Document';
+import MissionViewer from './components/MissionViewer';
+import GlobalMapViewer from './components/GlobalMapViewer';
 
 const drawerWidth = 260;
 const collapsedWidth = 72;
@@ -118,6 +122,9 @@ const menuItems = [
     { text: 'Sessions', icon: <FlightIcon />, path: '/sessions', color: '#F59E0B' },
     { text: 'Feedback', icon: <FeedbackIcon />, path: '/feedback', color: '#EC4899' },
     { text: 'Airspace', icon: <MapIcon />, path: '/airspace', color: '#EF4444' },
+    { text: 'Map', icon: <MapIcon />, path: '/map', color: '#3B82F6' },
+    { text: 'Missions', icon: <FlightIcon />, path: '/missions', color: '#10B981' },
+    { text: 'Documents', icon: <DescriptionIcon />, path: '/documents', color: '#8B5CF6' },
 ];
 
 function Navigation({ children }) {
@@ -395,6 +402,9 @@ function App() {
                         <Route path="/sessions" element={<SessionsTable />} />
                         <Route path="/feedback" element={<FeedbackList />} />
                         <Route path="/airspace" element={<AirspaceManager />} />
+                        <Route path="/map" element={<GlobalMapViewer />} />
+                        <Route path="/missions" element={<MissionViewer />} />
+                        <Route path="/documents" element={<Document />} />
                     </Routes>
                 </Navigation>
             </Router>
