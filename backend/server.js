@@ -56,6 +56,7 @@ const otpStore = {};
 app.use(cors({
     origin: [
         'https://qgc-backend.vercel.app',
+        'https://agri-qgc-admin.vercel.app',
         'http://localhost:5173',
         'http://localhost:5174',
         'http://localhost:5175',
