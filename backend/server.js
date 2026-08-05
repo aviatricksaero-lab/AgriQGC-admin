@@ -1,5 +1,7 @@
 const express = require('express');
 require('dotenv').config();
+const dns = require('dns');
+dns.setServers(['8.8.8.8', '8.8.4.4']);
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -15,6 +17,7 @@ const Facility = require('./models/Facility');
 const ParameterActivity = require('./models/ParameterActivity');
 const Mission = require('./models/Mission');
 const Document = require('./models/Document');
+const AppDefaults = require('./models/AppDefaults');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -348,11 +351,12 @@ app.post('/api/register', async (req, res) => {
 
 // Login User
 app.post('/api/login', async (req, res) => {
+    console.log(`User logged in: ${req.body.userInput}`);
     try {
         const { userInput, password } = req.body;
         const user = await User.findOne({ $or: [{ email: userInput }, { username: userInput }] });
-        if (!user) return res.status(404).json({ success: false, message: 'User not found' });
-        if (user.password !== password) return res.status(401).json({ success: false, message: 'Invalid credentials' });
+        if (!user) return res.status(404).json({ success: false, message: 'Incorrect username' });
+        if (user.password !== password) return res.status(401).json({ success: false, message: 'Incorrect password' });
         res.json({ success: true, message: 'Login successful', user });
         console.log(`User logged in successfully: ${user.username} (${user.email})`);
     } catch (err) {
@@ -881,10 +885,10 @@ app.delete('/api/missions/by-name/:name', async (req, res) => {
 const connectedDronesStore = {};
 
 // ── POST /api/drone/connect  (call this from your drone app on connect) ────────
-// Body: { username, email?, drone_id?, drone_name?, lat, lng, plan_name?, date?, battery?, altitude? }
+// Body: { username, email?, drone_id?, drone_name?, lat, lng, plan_name?, date?, battery?, altitude?, cellCount? }
 app.post('/api/drone/connect', async (req, res) => {
     try {
-        const { username, drone_id, drone_name, lat, lng, plan_name, date, battery, altitude } = req.body;
+        const { username, drone_id, drone_name, lat, lng, plan_name, date, battery, altitude, cellCount } = req.body;
         let { email } = req.body;
 
         if (!username || lat == null || lng == null) {
@@ -901,6 +905,30 @@ app.post('/api/drone/connect', async (req, res) => {
             } catch (_) {}
         }
 
+        const FailsafeDefaults = require('./models/FailsafeDefaults');
+        const failsafe = await FailsafeDefaults.getOrCreate();
+
+        let defaultLowVolt = 10.0;
+        let defaultCritVolt = 9.5;
+        const count = cellCount ? parseInt(cellCount) : 3;
+
+        if (count <= 3) {
+            defaultLowVolt = failsafe.battVolt_3S;
+            defaultCritVolt = failsafe.battCritVolt_3S;
+        } else if (count <= 6) {
+            defaultLowVolt = failsafe.battVolt_6S;
+            defaultCritVolt = failsafe.battCritVolt_6S;
+        } else if (count <= 12) {
+            defaultLowVolt = failsafe.battVolt_12S;
+            defaultCritVolt = failsafe.battCritVolt_12S;
+        } else if (count <= 14) {
+            defaultLowVolt = failsafe.battVolt_14S;
+            defaultCritVolt = failsafe.battCritVolt_14S;
+        } else {
+            defaultLowVolt = failsafe.battVolt_18S;
+            defaultCritVolt = failsafe.battCritVolt_18S;
+        }
+
         connectedDronesStore[username] = {
             username,
             email: email ?? '',
@@ -913,11 +941,20 @@ app.post('/api/drone/connect', async (req, res) => {
             connected_at: new Date().toISOString(),
             battery: battery ?? null,
             altitude: altitude ?? null,
+            cellCount: count,
+            defaultLowVolt,
+            defaultCritVolt,
             updated_at: Date.now(), // Track for timeout cleanup
         };
 
-        console.log(`🚁 Drone connected: ${username} at [${lat}, ${lng}]`);
-        res.json({ success: true, message: 'Drone registered as connected' });
+        console.log(`🚁 Drone connected: ${username} at [${lat}, ${lng}] with ${count}S cells`);
+        res.json({
+            success: true,
+            message: 'Drone registered as connected',
+            cellCount: count,
+            defaultLowVolt,
+            defaultCritVolt
+        });
     } catch (err) {
         console.error('Error connecting drone:', err);
         res.status(500).json({ success: false, message: 'Server error' });
@@ -1018,6 +1055,119 @@ setInterval(() => {
         }
     }
 }, 10000); // Check every 10 seconds
+
+// =============================================================================
+//  APP DEFAULTS  (admin-controlled default values for the QGC app)
+// =============================================================================
+
+/**
+ * GET /api/app-defaults
+ * Returns the singleton defaults document.
+ * Creates it with seed values the first time it is called.
+ * Used by the QGC app on startup to load admin-set defaults.
+ */
+app.get('/api/app-defaults', async (req, res) => {
+    try {
+        const defaults = await AppDefaults.getOrCreate();
+        res.json({ success: true, defaults });
+    } catch (err) {
+        console.error('GET /api/app-defaults error:', err);
+        res.status(500).json({ success: false, message: 'Server error fetching app defaults' });
+    }
+});
+
+/**
+ * PUT /api/app-defaults
+ * Body: any subset of the 12 settings fields.
+ * Updates the singleton document and returns the updated version.
+ * Used by the Admin Panel to persist new default values.
+ */
+app.put('/api/app-defaults', async (req, res) => {
+    try {
+        const allowedFields = [
+            'followTarget', 'androidSaveToSDCard', 'takeoffAltSpeed',
+            'yawBehavior', 'virtualJoystick', 'virtualJoystickAutoCenterThrottle',
+            'distanceUnits', 'areaUnits', 'speedUnits', 'temperatureUnits',
+            'telemetrySave', 'telemetrySaveNotArmed'
+        ];
+
+        const updates = {};
+        for (const field of allowedFields) {
+            if (req.body[field] !== undefined) {
+                updates[field] = Number(req.body[field]);
+            }
+        }
+        updates.updatedAt = new Date();
+
+        const updated = await AppDefaults.findOneAndUpdate(
+            { key: 'global' },
+            { $set: updates },
+            { new: true, upsert: true, setDefaultsOnInsert: true }
+        );
+
+        console.log('App defaults updated by admin:', updates);
+        res.json({ success: true, defaults: updated });
+    } catch (err) {
+        console.error('PUT /api/app-defaults error:', err);
+        res.status(500).json({ success: false, message: 'Server error updating app defaults' });
+    }
+});
+
+// =============================================================================
+//  FAILSAFE DEFAULTS
+// =============================================================================
+
+const FailsafeDefaults = require('./models/FailsafeDefaults');
+
+app.get('/api/failsafe-defaults', async (req, res) => {
+    try {
+        const defaults = await FailsafeDefaults.getOrCreate();
+        res.json({ success: true, defaults });
+    } catch (err) {
+        console.error('GET /api/failsafe-defaults error:', err);
+        res.status(500).json({ success: false, message: 'Server error fetching failsafe defaults' });
+    }
+});
+
+app.put('/api/failsafe-defaults', async (req, res) => {
+    try {
+        const allowedFields = [
+            'battLowAction', 'battCritAction', 'battLowMah', 'battCritMah',
+            'battVolt_3S', 'battVolt_6S', 'battVolt_12S', 'battVolt_14S', 'battVolt_18S',
+            'battCritVolt_3S', 'battCritVolt_6S', 'battCritVolt_12S', 'battCritVolt_14S', 'battCritVolt_18S',
+            'batt2LowAction', 'batt2CritAction', 'batt2LowMah', 'batt2CritMah',
+            'batt2Volt_3S', 'batt2Volt_6S', 'batt2Volt_12S', 'batt2Volt_14S', 'batt2Volt_18S',
+            'batt2CritVolt_3S', 'batt2CritVolt_6S', 'batt2CritVolt_12S', 'batt2CritVolt_14S', 'batt2CritVolt_18S',
+            'gcsFailsafe', 'thrFailsafe', 'thrPwmThreshold',
+            'fenceEnabled', 'fenceAltMax', 'fenceRadius', 'fenceType', 'fenceAction', 'fenceMargin',
+            'rtlAltMode', 'rtlAltSpecified', 'rtlLoitTime', 'rtlAltFinal', 'landDescentSpeed'
+        ];
+
+        const updates = {};
+        for (const field of allowedFields) {
+            if (req.body[field] !== undefined) {
+                if (typeof req.body[field] === 'boolean') {
+                    updates[field] = req.body[field];
+                } else {
+                    updates[field] = Number(req.body[field]);
+                }
+            }
+        }
+        updates.updatedAt = new Date();
+
+        const updated = await FailsafeDefaults.findOneAndUpdate(
+            { key: 'global' },
+            { $set: updates },
+            { new: true, upsert: true, setDefaultsOnInsert: true }
+        );
+
+        console.log('Failsafe defaults updated by admin:', updates);
+        res.json({ success: true, defaults: updated });
+    } catch (err) {
+        console.error('PUT /api/failsafe-defaults error:', err);
+        res.status(500).json({ success: false, message: 'Server error updating failsafe defaults' });
+    }
+});
 
 // =============================================================================
 //  START SERVER

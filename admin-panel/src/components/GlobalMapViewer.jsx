@@ -382,10 +382,15 @@ const GlobalMapViewer = () => {
                             <td style="padding:4px 6px;color:#777;">🔋 Battery</td>
                             <td style="padding:4px 6px;font-weight:600;color:${drone.battery > 30 ? '#10B981' : '#EF4444'};">${drone.battery}%</td>
                         </tr>` : ''}
-                        ${drone.altitude != null ? `
+                        ${drone.cellCount != null ? `
                         <tr>
-                            <td style="padding:4px 0;color:#777;">📡 Altitude</td>
-                            <td style="padding:4px 0;font-weight:600;color:#222;">${drone.altitude} m</td>
+                            <td style="padding:4px 0;color:#777;">🔋 Cells</td>
+                            <td style="padding:4px 0;font-weight:600;color:#222;">${drone.cellCount}S</td>
+                        </tr>` : ''}
+                        ${drone.altitude != null ? `
+                        <tr style="background:#f9fafb;">
+                            <td style="padding:4px 6px;color:#777;">📡 Altitude</td>
+                            <td style="padding:4px 6px;font-weight:600;color:#222;">${drone.altitude} m</td>
                         </tr>` : ''}
                     </table>
 

@@ -32,7 +32,8 @@ import {
     ChevronLeft as ChevronLeftIcon,
     Notifications as NotificationsIcon,
     Brightness4 as DarkIcon,
-    Shield as ShieldIcon
+    Shield as ShieldIcon,
+    Tune as TuneIcon
 } from '@mui/icons-material';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
@@ -46,11 +47,14 @@ import AirspaceManager from './components/AirspaceManager';
 import Document from './components/Document';
 import MissionViewer from './components/MissionViewer';
 import GlobalMapViewer from './components/GlobalMapViewer';
+import AppDefaultsSettings from './components/AppDefaultsSettings';
+import FailsafeDefaultsSettings from './components/FailsafeDefaultsSettings';
 
 const drawerWidth = 260;
 const collapsedWidth = 72;
-
+ 
 const lightTheme = createTheme({
+// ... (abbreviated theme section)
     palette: {
         mode: 'light',
         primary: {
@@ -124,15 +128,27 @@ const lightTheme = createTheme({
     },
 });
 
+import SvgIcon from '@mui/material/SvgIcon';
+
+function DroneIcon(props) {
+    return (
+        <SvgIcon {...props}>
+            <path d="M19.5,9.5L14.25,12.25L17,17.5L12.25,14.75L7.5,17.5L10.25,12.25L5,9.5L7.5,8L12.25,10.75L17,8L19.5,9.5M12.25,5.5C13.17,5.5 13.92,6.27 13.92,7.19C13.92,8.12 13.17,8.86 12.25,8.86C11.33,8.86 10.58,8.12 10.58,7.19C10.58,6.27 11.33,5.5 12.25,5.5Z" />
+        </SvgIcon>
+    );
+}
+
 const menuItems = [
     { text: 'Dashboard', icon: <DashboardIcon />, path: '/', color: '#10B981' },
     { text: 'Users', icon: <PeopleIcon />, path: '/users', color: '#6366F1' },
-    { text: 'Sessions', icon: <FlightIcon />, path: '/sessions', color: '#F59E0B' },
+    { text: 'Sessions', icon: <DroneIcon />, path: '/sessions', color: '#F59E0B' },
     { text: 'Feedback', icon: <FeedbackIcon />, path: '/feedback', color: '#EC4899' },
     { text: 'Airspace', icon: <MapIcon />, path: '/airspace', color: '#EF4444' },
     { text: 'Map', icon: <MapIcon />, path: '/map', color: '#3B82F6' },
-    { text: 'Missions', icon: <FlightIcon />, path: '/missions', color: '#10B981' },
+    { text: 'Missions', icon: <DroneIcon />, path: '/missions', color: '#10B981' },
     { text: 'Documents', icon: <DescriptionIcon />, path: '/documents', color: '#8B5CF6' },
+    { text: 'App Defaults', icon: <TuneIcon />, path: '/app-defaults', color: '#059669' },
+    { text: 'Failsafe Defaults', icon: <ShieldIcon />, path: '/failsafe-defaults', color: '#EF4444' },
 ];
 
 function Navigation({ children }) {
@@ -284,7 +300,7 @@ function Navigation({ children }) {
                                                     borderRadius: '50%',
                                                     bgcolor: item.color,
                                                     boxShadow: `0 0 8px ${item.color}`,
-                                                }} />
+                                                 }} />
                                             )}
                                         </ListItemButton>
                                     </Tooltip>
@@ -418,6 +434,8 @@ function App() {
                         <Route path="/map" element={<GlobalMapViewer />} />
                         <Route path="/missions" element={<MissionViewer />} />
                         <Route path="/documents" element={<Document />} />
+                        <Route path="/app-defaults" element={<AppDefaultsSettings />} />
+                        <Route path="/failsafe-defaults" element={<FailsafeDefaultsSettings />} />
                     </Routes>
                 </Navigation>
             </Router>
