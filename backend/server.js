@@ -82,8 +82,14 @@ app.use((req, res, next) => {
     next();
 });
 
+// Root route
+app.get('/', (req, res) => {
+    res.send('API is working');
+});
+
 // MongoDB Connection
 const MONGO_URI = process.env.MONGO_URI;
+
 
 mongoose.connect(MONGO_URI)
     .then(() => console.log('MongoDB connected successfully'))
